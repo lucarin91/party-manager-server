@@ -1,0 +1,6 @@
+#FOR POSTGRE PYTHON DRIVER 
+--fedora
+sudo yum install libpqxx-devel.i686 python-devel
+
+--koding
+sudo apt-get install libpq-dev 

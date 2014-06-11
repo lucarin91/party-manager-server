@@ -1,0 +1,30 @@
+#FEDORA
+wget -qO- https://toolbelt.heroku.com/install.sh | sh
+echo 'PATH=/usr/local/heroku/bin:$PATH' >> .bashrc
+heroku login
+sudo pip install virtualenv
+sudo yum install libpqxx-devel.i686 python-devel
+??sudo gem install foreman??
+
+..
+heroku git:clone -a androidpartymanager
+cd androidpartymanager
+virtualenv venv
+source venv/bin/activate
+pip install -r requirement.txt
+
+
+#git comand
+git add .
+git commit -m 'aosdhkajsd'
+git push heroku master
+
+#se installi una nuova libreria
+pip freeze > requirement.txt 
+
+#per startarla in locale
+source venv/bin/activate
+foreman start
+
+#servizio online
+http://androidpartymanager.herokuapp.com
