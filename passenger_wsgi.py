@@ -43,7 +43,7 @@ def requiresLogin(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'idFacebook' not in session:
-            return 'session error '+ where
+            return 'session error 123'+ where
         return f(*args, **kwargs)
     return decorated
 
