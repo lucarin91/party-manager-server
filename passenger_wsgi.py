@@ -33,9 +33,9 @@ sql = psycopg2.connect(
 )
 
 
-app = Flask(__name__)
-app.config['DEBUG'] = True
-app.secret_key = 'asdasdasd'
+application = Flask(__name__)
+application.config['DEBUG'] = True
+application.secret_key = 'asdasdasd'
 
 
 
@@ -47,7 +47,7 @@ def requiresLogin(f):
         return f(*args, **kwargs)
     return decorated
 
-@app.route('/')
+@application.route('/')
 @requiresLogin
 def index():
     return 'ciao'
@@ -492,14 +492,14 @@ attributoView = Attributi.as_view('attr')
 risposteView = Risposte.as_view('ris')
 userView = User.as_view('user')
 '''
-app.add_url_rule('/event', view_func=eventoView, methods=['GET','POST'])
-app.add_url_rule('/event/<int:idEvento>', view_func=attributoView, methods=['GET','POST'])
-#app.add_url_rule('/attr', view_func=attributoView, methods=['GET','POST'])
-app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET','POST','PUT'])
-app.add_url_rule('/user', view_func=userView, methods=['GET','POST'])
+application.add_url_rule('/event', view_func=eventoView, methods=['GET','POST'])
+application.add_url_rule('/event/<int:idEvento>', view_func=attributoView, methods=['GET','POST'])
+#application.add_url_rule('/attr', view_func=attributoView, methods=['GET','POST'])
+application.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET','POST','PUT'])
+application.add_url_rule('/user', view_func=userView, methods=['GET','POST'])
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@application.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST' and request.form['idFacebook'] != '' and request.form['token'] != '':
         token = request.form['token'].strip()
@@ -518,7 +518,7 @@ def login():
     else:
         return render_template('login.html')
 
-@app.route('/logout')
+@application.route('/logout')
 def logout():
     # remove the username from the session if it's there
     session.pop('idFacebook', None)
@@ -529,7 +529,7 @@ def logout():
 DEBUG FUNCTION
 '''
 
-@app.route('/send', methods=['GET','POST'])
+@application.route('/send', methods=['GET','POST'])
 def send():
     if request.method == 'POST' and request.form['idFacebook']!='':
         idFacebook = request.form['idFacebook']
@@ -539,7 +539,7 @@ def send():
         return render_template('send.html')
            
 
-@app.route("/lista", methods=['GET','POST'])
+@application.route("/lista", methods=['GET','POST'])
 def lista():
     if request.method == 'POST':
         table = request.form['table']
