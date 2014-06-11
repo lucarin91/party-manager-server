@@ -21,9 +21,9 @@ from functools import wraps
 
 APPTOKEN = '401068586702319|5f78073b1129c9ff17880a96b6bf9ac9'
 APPID =  '401068586702319'
-
 gcmSender = GCM('AIzaSyDz0b7i-9n3UPTXXrySRcfK90UfKweweUc')
 
+'''
 sql = psycopg2.connect(
     database='d5ht3v16g2i6te',
     user='vbsxnsuyearmdz',
@@ -31,13 +31,12 @@ sql = psycopg2.connect(
     host='ec2-23-23-244-144.compute-1.amazonaws.com',
     port=5432
 )
-
+'''
 
 application = Flask(__name__)
-application.config['DEBUG'] = True
+application.config.from_envvar('WSGI_ENV')
 application.secret_key = 'asdasdasd'
-
-
+sql = application.config['SQL']
 
 def requiresLogin(f):
     @wraps(f)
