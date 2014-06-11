@@ -37,19 +37,20 @@ application = Flask(__name__)
 application.config.from_envvar('WSGI_ENV')
 application.secret_key = 'asdasdasd'
 sql = application.config['SQL']
+where = application.config['WHERE']
 
 def requiresLogin(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'idFacebook' not in session:
-            return 'session error'
+            return 'session error '+ where
         return f(*args, **kwargs)
     return decorated
 
 @application.route('/')
 @requiresLogin
 def index():
-    return 'ciao'
+    return 'ciao '+ where
 
 
 class User(MethodView):

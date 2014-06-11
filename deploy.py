@@ -7,3 +7,4 @@ SQL = psycopg2.connect(
     host='ec2-23-23-244-144.compute-1.amazonaws.com',
     port=5432
 )
+WHERE='deployment'
