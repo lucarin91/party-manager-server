@@ -311,9 +311,9 @@ class Risposte(MethodView):
         
         try:
             cur = sql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-            cur.execute("""select id_risposta, risposta, id_user, template 
-                        from rispose natural join risposte natural join attributi
-                        where id_attributo=%s order by id_risposta""",(idAttributo,))
+            cur.execute("""select risposte.id_risposta, risposta, id_user, template 
+                        from risposte natural join attributi left join rispose on risposte.id_risposta=rispose.id_risposta
+                        where attributi.id_attributo=%s order by id_risposta""",(idAttributo,))
             
             sql.commit()
             risposte = cur.fetchall()
