@@ -325,8 +325,9 @@ class Risposte(MethodView):
                 for p in risposte:
                     if p['id_risposta'] != ris[len(ris)-1]['id_risposta']:
                         ris.append({'id_risposta': p['id_risposta'], 'risposta': p['risposta'], 'template': p['template'], 'userList': []})
-                    name = getFacebookName(p['id_user'])
-                    ris[len(ris)-1]['userList'].append({'id_user': p['id_user'], 'name': name})
+                    if p['id_user'] is not None:
+                        name = getFacebookName(p['id_user'])
+                        ris[len(ris)-1]['userList'].append({'id_user': p['id_user'], 'name': name})
                         
         except Exception, e:
             sql.rollback()
