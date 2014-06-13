@@ -201,7 +201,7 @@ class Attributi(MethodView):
                             ) tA natural join risposte
                             where attributi.id_evento=%s""",(idEvento,))
             '''
-            cur.execute("""select attributi.id_attributo, domanda, template, id_risposta, risposta, num_risposta as numR, num_risposte as numD, chiusa 
+            cur.execute("""select distinct attributi.id_attributo, domanda, template, id_risposta, risposta, num_risposta as numR, num_risposte as numD, chiusa 
                             from risposte natural join rispose right join attributi on rispose.id_attributo = attributi.id_attributo 
                             where id_evento=%s and (max=true or id_risposta is NULL)""",(idEvento,))
             sql.commit()
