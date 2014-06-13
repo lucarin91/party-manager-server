@@ -362,7 +362,7 @@ class Risposte(MethodView):
                 cur.execute("INSERT INTO rispose(id_risposta,id_attributo,id_user) VALUES(%s,%s,%s)",(idRisposta,idAttributo,user))
 
                 cur.execute("select domanda from attributi where id_attributo=%s",(idAttributo,))
-                domanda = cur.fetchone()
+                domanda = cur.fetchone()[0]
                 sql.commit()
                 userName = getFacebookName(user)
                 msg = {'type':'newRis', 'agg': '0', 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
@@ -379,7 +379,7 @@ class Risposte(MethodView):
                             sql.commit()
                             
                             cur.execute("select domanda from attributi where id_attributo=%s",(idAttributo,))
-                            domanda = cur.fetchone()
+                            domanda = cur.fetchone()[0]
                             sql.commit()
                             userName = getFacebookName(user)
                             msg = {'type':'newRis', 'agg': '1', 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
@@ -411,10 +411,10 @@ class Risposte(MethodView):
             
             cur.execute("select domanda from attributi where id_attributo=%s",(idAttributo,))
             sql.commit()
-            domanda = cur.fetchone()
+            domanda = cur.fetchone()[0]
             cur.execute("select risposta, count(*) from rispose natural join risposte where id_risposta=%s group by risposta",(idRisposta,))
             sql.commit()
-            risposta = cur.fetchone()
+            risposta = cur.fetchone()[0]
             userName = getFacebookName(user)
             
             msg = {'type':'risp', 'agg':'0', 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': str(risposta[0]), 'numr': str(risposta[1])}
@@ -431,10 +431,10 @@ class Risposte(MethodView):
                         
                         cur.execute("select domanda from attributi where id_attributo=%s",(idAttributo,))
                         sql.commit()
-                        domanda = cur.fetchone()
+                        domanda = cur.fetchone()[0]
                         cur.execute("select risposta, count(*) from rispose natural join risposte where id_risposta=%s group by risposta",(idRisposta,))
                         sql.commit()
-                        risposta = cur.fetchone()
+                        risposta = cur.fetchone()[0]
                         userName = getFacebookName(user)
                         
                         msg = {'type':'Risp', 'agg':'1', 'user': user, 'userName': userName, 'id_attributo': idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': str(risposta[0]), 'numr': str(risposta[1])}
