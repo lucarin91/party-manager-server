@@ -59,7 +59,7 @@ class User(MethodView):
 	try:
  		cur = sql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 		cur.execute("SELECT id_user, username from utenti natural join evento where id_evento=%s", (idEvento,))
-        sql.commit()
+		sql.commit()
 		utenti = cur.fetchall()
 		for u in utenti:
 			u['name'] = getFacebookName(u['id_user'])
