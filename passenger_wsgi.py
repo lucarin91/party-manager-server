@@ -134,6 +134,7 @@ class Event(MethodView):
         if request.form['name']!='' and request.form['userList']!='':
             try:
                 nome_evento = request.form['name'].strip()
+				print nome_evento
                 userList = json.loads(request.form['userList'].strip())
                 admin = session['idFacebook'].strip()
             except:
