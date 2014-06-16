@@ -61,8 +61,8 @@ class User(MethodView):
 		cur.execute("SELECT id_user, username from utenti natural join evento where id_evento=%s", (idEvento,))
                 sql.commit()
 		utenti = cur.fetchall()
-		print utenti
-        	return jsonify(results = utenti)
+        	#return jsonify(results = utenti)
+		return utenti
 	except Exception, e:
 		return 'error ' + str(e)
 	finally:
