@@ -54,15 +54,14 @@ def index():
 
 
 class User(MethodView):
-    def get(self):
-	idEvento = request.form['idEvento']
+    def get(self, idEvento):
 
 	try:
  		cur = sql.cursor()
 		cur.execute("SELECT id_user, username from utenti natural join evento where id_evento=%s", (idEvento))
                 sql.commit()
 		utenti = cur.fetchall()
-        	return jsonify(results = eventi)
+        	return jsonify(results = utenti)
 	except Exception, e:
 		return 'error' + str(e)
 	finally:
