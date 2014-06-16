@@ -139,8 +139,8 @@ class Event(MethodView):
             except:
                 return 'error json parser'
 
-            print nome_evento
-            
+            #print nome_evento
+
             if not admin in userList:
                 userList.append(admin)
 
