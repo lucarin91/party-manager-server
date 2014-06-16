@@ -57,11 +57,15 @@ class User(MethodView):
     def get(self, idEvento):
 
 	try:
- 		cur = sql.cursor()
+ 		cur = sql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 		cur.execute("SELECT id_user, username from utenti natural join evento where id_evento=%s", (idEvento,))
-                sql.commit()
+        sql.commit()
 		utenti = cur.fetchall()
-        	return jsonify(results = utenti)
+		for u in utenti:
+			u['name'] = getFacebookName(u['id_user'])
+		
+		    
+        return jsonify(results = utenti)
 	except Exception, e:
 		return 'error ' + str(e)
 	finally:
