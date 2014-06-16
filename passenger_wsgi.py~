@@ -58,12 +58,12 @@ class User(MethodView):
 
 	try:
  		cur = sql.cursor()
-		cur.execute("SELECT id_user, username from utenti natural join evento where id_evento=%s", (idEvento))
+		cur.execute("SELECT id_user, username from utenti natural join evento where id_evento=%s", ("1"))
                 sql.commit()
 		utenti = cur.fetchall()
         	return jsonify(results = utenti)
 	except Exception, e:
-		return 'error' + str(e)
+		return 'error ' + str(e)
 	finally:
             cur.close()
         
