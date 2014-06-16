@@ -54,7 +54,7 @@ def index():
 
 
 class User(MethodView):
-    def get(self, idEvento):
+    def get(self):
 
 	try:
  		cur = sql.cursor()
