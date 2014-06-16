@@ -55,7 +55,19 @@ def index():
 
 class User(MethodView):
     def get(self):
-        return 'user get'
+	idEvento = request.form['idEvento']
+
+	try:
+ 		cur = sql.cursor()
+		cur.execute("SELECT id_user, username from utenti natural join evento where id_evento=%s", (idEvento))
+                sql.commit()
+		utenti = cur.fetchall()
+        	return jsonify(results = eventi)
+	except Exception, e:
+		return 'error' + str(e)
+	finally:
+            cur.close()
+        
 
     def post(self):
         if request.form['idCell']!='' and request.form['username']!='':
