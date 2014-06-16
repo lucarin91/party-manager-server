@@ -54,11 +54,11 @@ def index():
 
 
 class User(MethodView):
-    def get(self):
+    def get(self, idEvento):
 
 	try:
  		cur = sql.cursor()
-		cur.execute("SELECT id_user, username from utenti natural join evento where id_evento=%s", ("1"))
+		cur.execute("SELECT id_user, username from utenti natural join evento where id_evento=%s", (idEvento,))
                 sql.commit()
 		utenti = cur.fetchall()
         	return jsonify(results = utenti)
@@ -508,8 +508,8 @@ application.add_url_rule('/event', view_func=eventoView, methods=['GET','POST'])
 application.add_url_rule('/event/<int:idEvento>', view_func=attributoView, methods=['GET','POST'])
 #application.add_url_rule('/attr', view_func=attributoView, methods=['GET','POST'])
 application.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET','POST','PUT'])
-application.add_url_rule('/user', view_func=userView, methods=['GET','POST'])
-
+application.add_url_rule('/user', view_func=userView, methods=['POST',])
+application.add_url_rule('/user/<int:idEvento>', view_func=userView, methods=['GET',])
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
