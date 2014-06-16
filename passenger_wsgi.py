@@ -65,11 +65,11 @@ class User(MethodView):
 			u['name'] = getFacebookName(u['id_user'])
 		
 		    
-        return jsonify(results = utenti)
+		return jsonify(results = utenti)
 	except Exception, e:
 		return 'error ' + str(e)
 	finally:
-            cur.close()
+		cur.close()
         
 
     def post(self):
