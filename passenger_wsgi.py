@@ -500,8 +500,9 @@ class Friends(MethodView):
             return 'error ' + str(e)
         finally:
             cur.close()
-    
+
     def post(self,idEvento):
+        return 'ciao'
 
 
 eventoView = requiresLogin(Event.as_view('event'))
