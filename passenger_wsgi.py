@@ -53,24 +53,7 @@ def index():
     return 'ciao '+ where
 
 
-class User(MethodView):
-    def get(self, idEvento):
-
-	try:
- 		cur = sql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-		cur.execute("SELECT id_user, username from utenti natural join evento where id_evento=%s", (idEvento,))
-		sql.commit()
-		utenti = cur.fetchall()
-		for u in utenti:
-			u['name'] = getFacebookName(u['id_user'])
-		
-		    
-		return jsonify(results = utenti)
-	except Exception, e:
-		return 'error ' + str(e)
-	finally:
-		cur.close()
-        
+class User(MethodView):        
 
     def post(self):
         if request.form['idCell']!='' and request.form['username']!='':
@@ -320,6 +303,7 @@ class Attributi(MethodView):
         else:
             return 'error POST parameters'
 
+
 class Risposte(MethodView):
     def get(self,idEvento,idAttributo):
         #controllare che l evento e il mio
@@ -500,10 +484,31 @@ class Risposte(MethodView):
         return 'fatto'
         '''
 
+class Friends(MethodView):
+    
+    def get(self,idEvento):
+        try:
+            cur = sql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+            cur.execute("SELECT id_user, username from utenti natural join evento where id_evento=%s", (idEvento,))
+            sql.commit()
+            utenti = cur.fetchall()
+            for u in utenti:
+                u['name'] = getFacebookName(u['id_user'])
+            
+            return jsonify(results = utenti)
+        except Exception, e:
+            return 'error ' + str(e)
+        finally:
+            cur.close()
+    
+    def post(self,idEvento):
+
+
 eventoView = requiresLogin(Event.as_view('event'))
 attributoView = requiresLogin(Attributi.as_view('attr'))
 risposteView = requiresLogin(Risposte.as_view('ris'))
 userView = requiresLogin(User.as_view('user'))
+friendsView = requiresLogin(Friends.as_view('friends'))
 '''
 eventoView = Event.as_view('event')
 attributoView = Attributi.as_view('attr')
@@ -515,7 +520,7 @@ application.add_url_rule('/event/<int:idEvento>', view_func=attributoView, metho
 #application.add_url_rule('/attr', view_func=attributoView, methods=['GET','POST'])
 application.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET','POST','PUT'])
 application.add_url_rule('/user', view_func=userView, methods=['POST',])
-application.add_url_rule('/user/<int:idEvento>', view_func=userView, methods=['GET',])
+application.add_url_rule('/friends/<int:idEvento>', view_func=friendsView, methods=['GET','POST'])
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
