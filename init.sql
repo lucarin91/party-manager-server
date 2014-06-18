@@ -104,15 +104,40 @@ END;
 $BODY$
 LANGUAGE PLPGSQL;
 
+CREATE OR REPLACE FUNCTION aggNumUtenti() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+BEGIN
+	UPDATE party SET num_utenti=num_utenti+1 WHERE id_evento=NEW.id_evento;
+	RETURN NULL;
+END;
+$BODY$
+LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION aggNumUtentiDEL() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+BEGIN
+	UPDATE party SET num_utenti=num_utenti-1 WHERE id_evento=NEW.id_evento;
+	RETURN NULL;
+END;
+$BODY$
+LANGUAGE PLPGSQL;
 
 DROP TRIGGER aggMax ON risposte;
-CREATE TRIGGER aggMax AFTER INSERT OR UPDATE ON risposte FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggMax();
+CREATE TRIGGER aggMax AFTER INSERT OR UPDATE ON risposte FOR EACH ROW WHEN (pg_trigger_depth() = 1) EXECUTE PROCEDURE aggMax();
 
 DROP TRIGGER aggNumRisposte ON rispose;
 CREATE TRIGGER aggNumRisposte AFTER INSERT ON rispose FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumRisposte();
 
 DROP TRIGGER aggNumRisposta ON rispose;
 CREATE TRIGGER aggNumRisposta BEFORE UPDATE ON rispose FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumRisposta();
+
+DROP TRIGGER aggNumUtenti ON party;
+CREATE TRIGGER aggNumUtenti AFTER INSERT ON party FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumUtenti();
+
+DROP TRIGGER aggNumUtentiDEL ON party;
+CREATE TRIGGER aggNumUtentiDEL AFTER DELETE ON party FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumUtentiDEL();
 
 /*materiale d'esempio*/
 /*

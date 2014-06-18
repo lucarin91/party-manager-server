@@ -502,8 +502,26 @@ class Friends(MethodView):
             cur.close()
 
     def post(self,idEvento):
-        return 'ciao'
+        if request.form['userList']!='':
+            try:
+                userList = json.loads(request.form['userList'].strip())
+            except Exception, e:
+                return 'json parser error'
 
+            try:
+                cur = sql.cursor()
+                for user in userList:
+                    cur.execute("INSERT INTO evento(id_evento, id_user) VALUES(%s,%s)", (idEvento,user))
+                sql.commit()
+                return 'fatto'
+
+            except Exception, e:
+                print 'error ' + str(e)
+                return 'error ' + str(e)
+            finally:
+                cur.close()
+        else:
+            return 'POST parameter error'
 
 eventoView = requiresLogin(Event.as_view('event'))
 attributoView = requiresLogin(Attributi.as_view('attr'))
