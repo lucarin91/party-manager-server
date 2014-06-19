@@ -133,11 +133,11 @@ CREATE TRIGGER aggNumRisposte AFTER INSERT ON rispose FOR EACH ROW WHEN (pg_trig
 DROP TRIGGER aggNumRisposta ON rispose;
 CREATE TRIGGER aggNumRisposta BEFORE UPDATE ON rispose FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumRisposta();
 
-DROP TRIGGER aggNumUtenti ON party;
-CREATE TRIGGER aggNumUtenti AFTER INSERT ON party FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumUtenti();
+DROP TRIGGER aggNumUtenti ON evento;
+CREATE TRIGGER aggNumUtenti AFTER INSERT ON evento FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumUtenti();
 
-DROP TRIGGER aggNumUtentiDEL ON party;
-CREATE TRIGGER aggNumUtentiDEL AFTER DELETE ON party FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumUtentiDEL();
+DROP TRIGGER aggNumUtentiDEL ON evento;
+CREATE TRIGGER aggNumUtentiDEL AFTER DELETE ON evento FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumUtentiDEL();
 
 /*materiale d'esempio*/
 /*

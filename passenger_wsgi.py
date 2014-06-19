@@ -523,6 +523,28 @@ class Friends(MethodView):
         else:
             return 'POST parameter error'
 
+    def delete(self,idEvento,idFacebook):
+        try:
+            user = session['idFacebook']
+            cur = sql.cursor()
+            cur.execute("SELECT admin FROM party WHERE id_evento=%s",(idEvento,))
+            admin = cur.fetchone()[0]
+            if (admin==user):
+                cur.execute("DELETE FROM evento WHERE id_evento=%s and id_user=%s", (idEvento,idFacebook))
+                cur = sql.cursor()
+                cur.execute("""DELETE FROM rispose 
+                                WHERE id_attributo 
+                                IN (select id_attributo from attributi where id_evento=%s) and id_user=%s""", (idEvento,idFacebook))     
+                sql.commit()
+                return 'fatto'
+            else:
+                return "error: l'utente non è amministratore"
+        except Exception, e:
+            print 'error ' + str(e)
+            return 'error ' + str(e)
+        finally:
+            cur.close()
+
 eventoView = requiresLogin(Event.as_view('event'))
 attributoView = requiresLogin(Attributi.as_view('attr'))
 risposteView = requiresLogin(Risposte.as_view('ris'))
@@ -540,6 +562,7 @@ application.add_url_rule('/event/<int:idEvento>', view_func=attributoView, metho
 application.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET','POST','PUT'])
 application.add_url_rule('/user', view_func=userView, methods=['POST',])
 application.add_url_rule('/friends/<int:idEvento>', view_func=friendsView, methods=['GET','POST'])
+application.add_url_rule('/friends/<int:idEvento>/<string:idFacebook', view_func=friendsView, methods=['DELETE',])
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
