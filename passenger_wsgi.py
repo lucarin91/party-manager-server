@@ -562,7 +562,7 @@ application.add_url_rule('/event/<int:idEvento>', view_func=attributoView, metho
 application.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET','POST','PUT'])
 application.add_url_rule('/user', view_func=userView, methods=['POST',])
 application.add_url_rule('/friends/<int:idEvento>', view_func=friendsView, methods=['GET','POST'])
-application.add_url_rule('/friends/<int:idEvento>/<string:idFacebook', view_func=friendsView, methods=['DELETE',])
+application.add_url_rule('/friends/<int:idEvento>/<idFacebook>', view_func=friendsView, methods=['DELETE',])
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
