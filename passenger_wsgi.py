@@ -538,7 +538,7 @@ class Friends(MethodView):
                 sql.commit()
                 return 'fatto'
             else:
-                return "error: l'utente non è amministratore"
+                return "error: l utente non è amministratore"
         except Exception, e:
             print 'error ' + str(e)
             return 'error ' + str(e)
