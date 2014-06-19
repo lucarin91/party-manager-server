@@ -129,7 +129,7 @@ class Event(MethodView):
 
             #print 'USERLIST: '+str(userList)
 
-            #numUtenti = len(userList)
+            numUtenti = len(userList)
             try:
                 cur = sql.cursor()
                 cur.execute("INSERT INTO party(admin,nome_evento) VALUES(%s,%s) RETURNING id_evento",(admin,nome_evento))
