@@ -127,12 +127,12 @@ class Event(MethodView):
             if not admin in userList:
                 userList.append(admin)
 
-            print 'USERLIST: '+str(userList)
+            #print 'USERLIST: '+str(userList)
 
-            numUtenti = len(userList)
+            #numUtenti = len(userList)
             try:
                 cur = sql.cursor()
-                cur.execute("INSERT INTO party(admin,nome_evento,num_utenti) VALUES(%s,%s,%s) RETURNING id_evento",(admin,nome_evento,numUtenti))
+                cur.execute("INSERT INTO party(admin,nome_evento) VALUES(%s,%s,%s) RETURNING id_evento",(admin,nome_evento))
                 
                 eventId = str(cur.fetchone()[0])
                 for p in userList:

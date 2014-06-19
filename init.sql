@@ -19,7 +19,7 @@ create table party(
 	admin varchar(500) references utenti(id_user),
 	nome_evento varchar(30),
 	data varchar(30),
-	num_utenti integer NOT NULL
+	num_utenti integer NOT NULL DEFAULT 0
 	);
 
 create table evento(
@@ -71,6 +71,7 @@ DECLARE
 numMax INTEGER;
 idNumMax INTEGER;
 BEGIN
+	RAISE NOTICE 'entrato in aggMax';
 	SELECT num_risposta INTO numMax FROM risposte WHERE id_attributo = NEW.id_attributo and max = true;
 	SELECT id_risposta INTO idNumMax FROM risposte WHERE id_attributo = NEW.id_attributo and max = true;
 	IF numMax IS NULL OR NEW.num_risposta >= numMax THEN
@@ -88,7 +89,7 @@ DECLARE
 BEGIN
 	UPDATE attributi SET num_risposte=num_risposte+1 WHERE id_attributo=NEW.id_attributo;
 	UPDATE risposte SET num_risposta=num_risposta+1 WHERE id_risposta=NEW.id_risposta;
-	RETURN NULL;
+	RETURN NEW;
 END;
 $BODY$
 LANGUAGE PLPGSQL;
@@ -99,6 +100,18 @@ DECLARE
 BEGIN
 	UPDATE risposte SET num_risposta=num_risposta-1 WHERE id_risposta=OLD.id_risposta;
 	UPDATE risposte SET num_risposta=num_risposta+1 WHERE id_risposta=NEW.id_risposta;
+	RETURN NEW;
+END;
+$BODY$
+LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION aggNumRispostaDEL() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+BEGIN
+	RAISE NOTICE 'entrato in aggNumRispostaDEl';
+	UPDATE risposte SET num_risposta=num_risposta-1 WHERE id_risposta=OLD.id_risposta;
+	UPDATE attributi SET num_risposte=num_risposte-1 WHERE id_attributo=OLD.id_attributo;
 	RETURN NEW;
 END;
 $BODY$
@@ -118,7 +131,7 @@ CREATE OR REPLACE FUNCTION aggNumUtentiDEL() RETURNS TRIGGER AS
 $BODY$
 DECLARE
 BEGIN
-	UPDATE party SET num_utenti=num_utenti-1 WHERE id_evento=NEW.id_evento;
+	UPDATE party SET num_utenti=num_utenti-1 WHERE id_evento=OLD.id_evento;
 	RETURN NULL;
 END;
 $BODY$
@@ -132,6 +145,9 @@ CREATE TRIGGER aggNumRisposte AFTER INSERT ON rispose FOR EACH ROW WHEN (pg_trig
 
 DROP TRIGGER aggNumRisposta ON rispose;
 CREATE TRIGGER aggNumRisposta BEFORE UPDATE ON rispose FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumRisposta();
+
+DROP TRIGGER aggNumRispostaDEL ON rispose;
+CREATE TRIGGER aggNumRispostaDEL AFTER DELETE ON rispose FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumRispostaDEL();
 
 DROP TRIGGER aggNumUtenti ON evento;
 CREATE TRIGGER aggNumUtenti AFTER INSERT ON evento FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumUtenti();
