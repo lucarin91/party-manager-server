@@ -1,4 +1,5 @@
 import psycopg2, psycopg2.extras, collections
+import json
 
 from flask import Flask
 from flask import request
@@ -23,6 +24,7 @@ class Friends(MethodView):
             
             return jsonify(results = utenti)
         except Exception, e:
+            sql.rollback()
             return 'error ' + str(e)
         finally:
             cur.close()
@@ -42,6 +44,7 @@ class Friends(MethodView):
                 return 'fatto'
 
             except Exception, e:
+                sql.rollback()
                 print 'error ' + str(e)
                 return 'error ' + str(e)
             finally:
@@ -66,6 +69,7 @@ class Friends(MethodView):
             else:
                 return 'error no amministratore'
         except Exception, e:
+            sql.rollback()
             print 'error ' + str(e)
             return 'error ' + str(e)
         finally:

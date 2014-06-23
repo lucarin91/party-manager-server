@@ -1,4 +1,5 @@
 import psycopg2, psycopg2.extras, collections
+import json
 
 from flask import Flask
 from flask import request
@@ -8,9 +9,7 @@ from flask.views import MethodView
 
 #HELPER#
 from ..helper import *
-from ..helper.Database import sql
-
-
+#from ..helper.Database import sql
 
 class Event(MethodView):
 

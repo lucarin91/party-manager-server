@@ -1,4 +1,4 @@
-__all__ = ["Event", "Attributi", "Risposte", "User", "Friends"]
+#__all__ = ["Event", "Attributi", "Risposte", "User", "Friends"]
 from Event import Event
 from Attributi import Attributi
 from Risposte import Risposte

@@ -14,7 +14,7 @@ from flask.views import MethodView
 from functools import wraps
 
 #PACKAGE APIPM#
-from apipm.helper import *
+from .helper import *
 from .views import *
 
 #facebook
@@ -22,12 +22,12 @@ APPTOKEN = '401068586702319|5f78073b1129c9ff17880a96b6bf9ac9'
 APPID =  '401068586702319'
 
 
-application = Flask(__name__)
-application.config.from_envvar('WSGI_ENV')
-application.secret_key = 'asdasdasd'
+app = Flask(__name__)
+app.config.from_envvar('WSGI_ENV')
+app.secret_key = 'asdasdasd'
 #sql = application.config['SQL']
 #Database.sql = sql
-where = application.config['WHERE']
+where = app.config['WHERE']
 
 
 def requiresLogin(f):
@@ -38,7 +38,7 @@ def requiresLogin(f):
         return f(*args, **kwargs)
     return decorated
 
-@application.route('/')
+@app.route('/')
 @requiresLogin
 def index():
     return 'ciao '+ where
@@ -49,14 +49,14 @@ risposteView = requiresLogin(Risposte.as_view('ris'))
 userView = requiresLogin(User.as_view('user'))
 friendsView = requiresLogin(Friends.as_view('friends'))
 
-application.add_url_rule('/event', view_func=eventoView, methods=['GET','POST'])
-application.add_url_rule('/event/<int:idEvento>', view_func=attributoView, methods=['GET','POST'])
-application.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET','POST','PUT'])
-application.add_url_rule('/user', view_func=userView, methods=['POST',])
-application.add_url_rule('/friends/<int:idEvento>', view_func=friendsView, methods=['GET','POST'])
-application.add_url_rule('/friends/<int:idEvento>/<idFacebook>', view_func=friendsView, methods=['DELETE',])
+app.add_url_rule('/event', view_func=eventoView, methods=['GET','POST'])
+app.add_url_rule('/event/<int:idEvento>', view_func=attributoView, methods=['GET','POST'])
+app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET','POST','PUT'])
+app.add_url_rule('/user', view_func=userView, methods=['POST',])
+app.add_url_rule('/friends/<int:idEvento>', view_func=friendsView, methods=['GET','POST'])
+app.add_url_rule('/friends/<int:idEvento>/<idFacebook>', view_func=friendsView, methods=['DELETE',])
 
-@application.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST' and request.form['idFacebook'] != '' and request.form['token'] != '':
         token = request.form['token'].strip()
@@ -75,7 +75,7 @@ def login():
     else:
         return render_template('login.html')
 
-@application.route('/logout')
+@app.route('/logout')
 def logout():
     # remove the username from the session if it's there
     session.pop('idFacebook', None)
@@ -86,7 +86,7 @@ def logout():
 DEBUG FUNCTION
 '''
 
-@application.route('/send', methods=['GET','POST'])
+@app.route('/send', methods=['GET','POST'])
 def send():
     if request.method == 'POST' and request.form['idFacebook']!='':
         idFacebook = request.form['idFacebook']
@@ -96,7 +96,7 @@ def send():
         return render_template('send.html')
            
 
-@application.route("/lista", methods=['GET','POST'])
+@app.route("/lista", methods=['GET','POST'])
 def lista():
     if request.method == 'POST':
         table = request.form['table']
