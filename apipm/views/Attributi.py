@@ -162,8 +162,8 @@ class Attributi(MethodView):
             admin = cur.fetchone()[0]
             sql.commit()
 
-            if user==admin :
-                cur.execute("DELETE FROM party WHERE id_evento=%s", (eventId,))
+            if user == admin:
+                cur.execute("DELETE FROM party WHERE id_evento=%s", (idEvento,))
 
             else:
                 delUtenteFromEvent(idEvento,user)
