@@ -8,6 +8,7 @@ gcmSender = GCM('AIzaSyDz0b7i-9n3UPTXXrySRcfK90UfKweweUc')
 
 #HELPER#
 from .Database import *
+from ..helper.Database import sql
 
 def sendNotification(idFacebook, message):
     try:

@@ -8,6 +8,7 @@ from flask.views import MethodView
 
 #HELPER#
 from ..helper import *
+from ..helper.Database import sql
 
 class Friends(MethodView):
     

@@ -7,6 +7,7 @@ from flask.views import MethodView
 
 #HELPER#
 from ..helper import *
+from ..helper.Database import sql
 
 class Attributi(MethodView):
 # id_attributo | domanda | template | id_evento | chiusa 
