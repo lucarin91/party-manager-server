@@ -501,9 +501,9 @@ class Risposte(MethodView):
             return 'error '+str(e)
         finally:
             cur.close()
-    '''
+    
 
-        '''
+        
         try:
             cur = sql.cursor()
             cur.execute("INSERT INTO rispose(id_risposta,id_user) VALUES(%s,%s)",(idRisposta,user))
@@ -535,7 +535,7 @@ class Risposte(MethodView):
             cur.close()
 
         return 'fatto'
-        '''
+    '''
 
 class Friends(MethodView):
     
