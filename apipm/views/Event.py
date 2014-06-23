@@ -109,5 +109,3 @@ class Event(MethodView):
             return 'error '+str(e)
         finally:
             cur.close()     
-        
-        
