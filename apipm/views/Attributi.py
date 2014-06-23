@@ -155,7 +155,7 @@ class Attributi(MethodView):
     def delete(self,idEvento):
 
         user = session['idFacebook']
-        
+        print 'sono entrato in elimina'
         try:
             cur = sql.cursor()
             cur.execute("SELECT admin FROM party WHERE id_evento=%s",(idEvento,))
