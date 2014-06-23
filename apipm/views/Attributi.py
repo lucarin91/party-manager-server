@@ -176,7 +176,7 @@ class Attributi(MethodView):
 
             if user == admin:
                 cur.execute("DELETE FROM attributi WHERE id_attributo=%s", (idAttributo,))
-                sql.commit()       
+                sql.commit()
                 sendNotificationEvent(idEvento,
                                       user,
                                       {'type': 'delAttr',
@@ -187,12 +187,10 @@ class Attributi(MethodView):
                                        'nome_attributo': Database.getAttributoName(idAttributo)})
                 return 'fatto'
             else:
-                return 'error: solo l admin può eliminare una domanda'
+                return 'error: solo l admin puo eliminare una domanda'
 
         except Exception, e:
             sql.rollback()
             return 'error ' + str(e)
         finally:
             cur.close()
-
-        
