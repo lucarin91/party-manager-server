@@ -166,12 +166,3 @@ CREATE TRIGGER aggNumUtenti AFTER INSERT ON evento FOR EACH ROW WHEN (pg_trigger
 
 DROP TRIGGER aggNumUtentiDEL ON evento;
 CREATE TRIGGER aggNumUtentiDEL AFTER DELETE ON evento FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumUtentiDEL();
-
-/*materiale d'esempio*/
-/*
-insert into utenti(id_cell,id_Facebook) values('id_cell', '1738252551');
-insert into utenti(id_cell,id_Facebook) values('id_cell', '1203476294');
-
-insert into party(admin,nome_evento, data, num_utenti) values('1738252551', 'prova1', '23/03/2014', '2');
-
-*/
