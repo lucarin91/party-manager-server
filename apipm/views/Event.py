@@ -82,6 +82,7 @@ class Event(MethodView):
         else:
             return 'error POST parameters'
 
+'''
     def delete(self,idEvento):
 
         user = session['idFacebook']
@@ -108,4 +109,5 @@ class Event(MethodView):
             sql.rollback()
             return 'error '+str(e)
         finally:
-            cur.close()     
+            cur.close()
+'''

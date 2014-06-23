@@ -150,3 +150,33 @@ class Attributi(MethodView):
             return idAttributo
         else:
             return 'error POST parameters'
+
+
+    
+    def delete(self,idEvento):
+
+        user = session['idFacebook']
+        
+        try:
+            cur = sql.cursor()
+            cur.execute("SELECT admin FROM party WHERE id_evento=%s",(idEvento,))
+            admin = cur.fetchone()[0]
+            sql.commit()
+
+            if user==admin :
+                cur.execute("DELETE FROM party WHERE id_evento=%s", (eventId,))
+
+            else:
+                delUtenteFromEvent(idEvento,user)
+
+            #adminName = getFacebookName(admin)
+            #msg = {'type':'newEvent','id_evento': eventId, 'nome_evento': nome_evento, 'admin': admin, 'adminName': adminName, 'num_utenti': str(numUtenti)}
+            #sendNotificationEvent(eventId,admin,msg)
+        
+            return 'fatto'
+
+        except Exception, e:
+            sql.rollback()
+            return 'error '+str(e)
+        finally:
+            cur.close()
