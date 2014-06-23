@@ -152,7 +152,6 @@ class Attributi(MethodView):
             return 'error POST parameters'
 
 
-    
     def delete(self,idEvento):
 
         user = session['idFacebook']
@@ -173,10 +172,11 @@ class Attributi(MethodView):
             #msg = {'type':'newEvent','id_evento': eventId, 'nome_evento': nome_evento, 'admin': admin, 'adminName': adminName, 'num_utenti': str(numUtenti)}
             #sendNotificationEvent(eventId,admin,msg)
         
-            return 'fatto'
 
         except Exception, e:
             sql.rollback()
             return 'error '+str(e)
         finally:
             cur.close()
+
+        return 'fatto'
