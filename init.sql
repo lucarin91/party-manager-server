@@ -16,7 +16,7 @@ create table utenti(
 
 create table party(
 	id_evento SERIAL primary key,
-	admin varchar(500) references utenti(id_user),
+	admin varchar(500) references utenti(id_user) ON DELETE CASCADE,
 	nome_evento varchar(30),
 	data varchar(30),
 	num_utenti integer NOT NULL DEFAULT 0
@@ -36,7 +36,7 @@ create table attributi(
 	id_attributo SERIAL primary key,
 	domanda varchar NOT NULL,
 	template varchar(30) references templateDom(name),
-	id_evento integer references party(id_evento) NOT NULL ON DELETE CASCADE,
+	id_evento integer references party(id_evento) ON DELETE CASCADE,
 	num_risposte integer NOT NULL DEFAULT 0,
 	chiusa boolean 
 	);

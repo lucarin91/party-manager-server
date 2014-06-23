@@ -51,10 +51,10 @@ friendsView = requiresLogin(Friends.as_view('friends'))
 
 #EVENTO
 app.add_url_rule('/event', view_func=eventoView, methods=['GET','POST'])
-#app.add_url_rule('/event/<int:idEvento>', view_func=eventoView, methods=['DELETE',])
+app.add_url_rule('/event/<int:idEvento>', view_func=eventoView, methods=['DELETE',])
 
 #ATTRIBUTI
-app.add_url_rule('/event/<int:idEvento>', view_func=attributoView, methods=['GET','POST','DELETE'])
+app.add_url_rule('/event/<int:idEvento>', view_func=attributoView, methods=['GET','POST'])
 
 #RISPOSTE
 app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET','POST','PUT'])
