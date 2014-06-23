@@ -7,6 +7,7 @@ sql = psycopg2.connect(
     host='localhost',
 ) if os.environ['WSGI_ENV']=='deploy.py' else None
 
+
 def delUtenteFromEvent(idEvento,idFacebook):
     cur = sql.cursor()
     cur.execute("DELETE FROM evento WHERE id_evento=%s and id_user=%s", (idEvento,idFacebook))
