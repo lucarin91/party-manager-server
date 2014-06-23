@@ -158,8 +158,24 @@ class Event(MethodView):
             
             return eventId
         else:
-            return 'error POST parameters'   
+            return 'error POST parameters'
 
+    '''
+    def delete(self,idEvento):
+        user = session['idFacebook']
+        try:
+            cur = sql.cursor()
+            cur.execute("SELECT admin FROM party WHERE id_evento=%s",(idEvento,))
+            admin = cur.fetchone()[0]
+            
+            #DA CONTINUARE#
+
+        except Exception, e:
+            sql.rollback()
+            return 'error1 '+str(e)
+        finally:
+            cur.close()
+    '''
 
 class Attributi(MethodView):
 # id_attributo | domanda | template | id_evento | chiusa 
@@ -303,6 +319,24 @@ class Attributi(MethodView):
         else:
             return 'error POST parameters'
 
+    '''
+    def delete(self,idEvento,idAttributo):
+        user = session['idFacebook']
+        try:
+            cur = sql.cursor()
+            cur.execute("SELECT admin FROM party WHERE id_evento=%s",(idEvento,))
+            admin = cur.fetchone()[0]
+            
+            if admin == user:
+                cur.execute("DELETE FROM attributi WHERE id_attributo=%s", idAttributo)
+                sql.commit()
+
+        except Exception, e:
+            sql.rollback()
+            return 'error '+str(e)
+        finally:
+            cur.close()
+    '''
 
 class Risposte(MethodView):
     def get(self,idEvento,idAttributo):
@@ -450,6 +484,25 @@ class Risposte(MethodView):
 
         return idRisposta
 
+    '''
+    def delete(self,idEvento,idAttributo,idRisposta):
+        user = session['idFacebook']
+        try:
+            cur = sql.cursor()
+            cur.execute("SELECT admin FROM party WHERE id_evento=%s",(idEvento,))
+            admin = cur.fetchone()[0]
+            
+            if admin == user:
+                cur.execute("DELETE FROM risposte WHERE id_risposta=%s", idRisposta)
+                sql.commit()
+
+        except Exception, e:
+            sql.rollback()
+            return 'error '+str(e)
+        finally:
+            cur.close()
+    '''
+
         '''
         try:
             cur = sql.cursor()
@@ -557,8 +610,12 @@ risposteView = Risposte.as_view('ris')
 userView = User.as_view('user')
 '''
 application.add_url_rule('/event', view_func=eventoView, methods=['GET','POST'])
+#application.add_url_rule('/event/<int:idEvento>', view_func=eventoView, methods=['DELETE',])
+
 application.add_url_rule('/event/<int:idEvento>', view_func=attributoView, methods=['GET','POST'])
+application.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=attributoView, methods=['DELETE',])
 #application.add_url_rule('/attr', view_func=attributoView, methods=['GET','POST'])
+
 application.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET','POST','PUT'])
 application.add_url_rule('/user', view_func=userView, methods=['POST',])
 application.add_url_rule('/friends/<int:idEvento>', view_func=friendsView, methods=['GET','POST'])

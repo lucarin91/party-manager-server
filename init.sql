@@ -23,8 +23,8 @@ create table party(
 	);
 
 create table evento(
-	id_evento integer references party(id_evento),
-	id_user varchar(500) references utenti(id_user),
+	id_evento integer references party(id_evento) ON DELETE CASCADE,
+	id_user varchar(500) references utenti(id_user) ON DELETE CASCADE,
 	primary key(id_evento, id_user)
 	);
 
@@ -36,23 +36,23 @@ create table attributi(
 	id_attributo SERIAL primary key,
 	domanda varchar NOT NULL,
 	template varchar(30) references templateDom(name),
-	id_evento integer references party(id_evento) NOT NULL,
+	id_evento integer references party(id_evento) NOT NULL ON DELETE CASCADE,
 	num_risposte integer NOT NULL DEFAULT 0,
 	chiusa boolean 
 	);
 
 create table risposte(
 	id_risposta SERIAL primary key,
-	id_attributo integer references attributi(id_attributo),
+	id_attributo integer references attributi(id_attributo) ON DELETE CASCADE,
 	num_risposta integer NOT NULL DEFAULT 0,
 	max boolean NOT NULL DEFAULT false,
 	risposta varchar NOT NULL
 	);
 
 create table rispose(
-	id_risposta integer references risposte(id_risposta),
-	id_attributo integer references attributi(id_attributo),
-	id_user varchar(500) references utenti(id_user),
+	id_risposta integer references risposte(id_risposta) ON DELETE CASCADE,
+	id_attributo integer references attributi(id_attributo) ON DELETE CASCADE,
+	id_user varchar(500) references utenti(id_user) ON DELETE CASCADE,
 	primary key(id_attributo, id_user)
 	);
 
@@ -70,15 +70,26 @@ $BODY$
 DECLARE
 numMax INTEGER;
 idNumMax INTEGER;
+newIdMax INTEGER;
 BEGIN
 	RAISE NOTICE 'entrato in aggMax';
 	SELECT num_risposta INTO numMax FROM risposte WHERE id_attributo = NEW.id_attributo and max = true;
 	SELECT id_risposta INTO idNumMax FROM risposte WHERE id_attributo = NEW.id_attributo and max = true;
-	IF numMax IS NULL OR NEW.num_risposta >= numMax THEN
-		UPDATE risposte SET max=true WHERE id_risposta=NEW.id_risposta;
-		UPDATE risposte SET max=false WHERE id_risposta=idNumMax;
+	RAISE NOTICE 'numMax % - idNumMax %s',numMax,idNumMax;
+	RAISE NOTICE 'new.numrisposta % - new.is_attributo %',NEW.num_risposta, NEW.id_attributo;
+	IF idNumMax is NULL OR idNumMax!= NEW.id_risposta THEN
+		IF numMax is NULL OR NEW.num_risposta >= numMax THEN
+			UPDATE risposte SET max=true WHERE id_risposta=NEW.id_risposta;
+			UPDATE risposte SET max=false WHERE id_risposta=idNumMax;
+			RAISE NOTICE 'sono entrato max=%',NEW.id_risposta;
+		END IF;
+	ELSE
+		SELECT id_risposta INTO newIdMax FROM risposte NATURAL JOIN attributi WHERE id_attributo=NEW.id_attributo ORDER BY num_risposta DESC LIMIT 1;
+		RAISE NOTICE 'sono entrato nellelse newIdMax=%',newIdMax;
+		UPDATE risposte SET max=true WHERE id_risposta=newIdMax;
+		UPDATE risposte SET max=false WHERE id_risposta=NEW.id_risposta;
 	END IF;
-	RETURN NULL;
+	RETURN NEW;
 END;
 $BODY$
 LANGUAGE PLPGSQL;
@@ -110,6 +121,7 @@ $BODY$
 DECLARE
 BEGIN
 	RAISE NOTICE 'entrato in aggNumRispostaDEl';
+	RAISE NOTICE 'id_risposta %',OLD.id_risposta;
 	UPDATE risposte SET num_risposta=num_risposta-1 WHERE id_risposta=OLD.id_risposta;
 	UPDATE attributi SET num_risposte=num_risposte-1 WHERE id_attributo=OLD.id_attributo;
 	RETURN NEW;
@@ -138,7 +150,7 @@ $BODY$
 LANGUAGE PLPGSQL;
 
 DROP TRIGGER aggMax ON risposte;
-CREATE TRIGGER aggMax AFTER INSERT OR UPDATE ON risposte FOR EACH ROW WHEN (pg_trigger_depth() = 1) EXECUTE PROCEDURE aggMax();
+CREATE TRIGGER aggMax AFTER INSERT OR UPDATE ON risposte FOR EACH ROW WHEN (pg_trigger_depth() <= 1) EXECUTE PROCEDURE aggMax();
 
 DROP TRIGGER aggNumRisposte ON rispose;
 CREATE TRIGGER aggNumRisposte AFTER INSERT ON rispose FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumRisposte();
