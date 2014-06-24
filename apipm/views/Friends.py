@@ -84,8 +84,5 @@ class Friends(MethodView):
                 return 'error no amministratore'
 
         except Exception, e:
-            sql.rollback()
             print 'error ' + str(e)
             return 'error ' + str(e)
-        finally:
-            cur.close()

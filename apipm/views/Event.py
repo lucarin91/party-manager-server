@@ -109,7 +109,7 @@ class Event(MethodView):
                        'id_evento': str(idEvento),
                        'nome_evento': Database.getEventName(idEvento),
                        'id_user': user,
-                       'name_user': getFacebookName(admin)}
+                       'name_user': getFacebookName(user)}
 
             sendNotificationEvent(idEvento, user, msg)
             return 'fatto'
