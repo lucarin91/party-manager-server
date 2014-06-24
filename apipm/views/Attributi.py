@@ -103,7 +103,7 @@ class Attributi(MethodView):
                 'risposta'] != '' else None
             chiusa = request.form['chiusa']
             user = session['idFacebook']
-            print 'user è di tipo: ' + str(type(user))
+            print 'user e di tipo: ' + str(type(user))
 
             #print "DEBUG parametri: " + domanda + " " + str(template) + " " + str(risposta) + " " + chiusa + " " + user
             # return domanda+template+risposta+chiusa+user
