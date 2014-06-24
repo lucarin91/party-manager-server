@@ -60,7 +60,7 @@ class Event(MethodView):
 
                 eventId = str(cur.fetchone()[0])
                 for p in userList:
-                    #print str(p)
+                    # print str(p)
                     cur.execute(
                         "INSERT INTO evento(id_evento, id_user) VALUES (%s,%s)", (eventId, p))
 
@@ -98,17 +98,17 @@ class Event(MethodView):
                 print 'DEBUG: elimina evento'
                 cur.execute("DELETE FROM party WHERE id_evento=%s", (idEvento,))
                 msg = {'type': 'delEvent',
-                       'id_evento': str(idEvento),
-                       'nome_evento': Database.getEventName(idEvento),
-                       'admin_name': getFacebookName(admin)}
+                        'id_evento': str(idEvento),
+                        'nome_evento': Database.getEventName(idEvento),
+                        'admin_name': getFacebookName(admin)}
             else:
                 print 'DEBUG: uscito evento'
                 delUtenteFromEvent(idEvento, user)
                 msg = {'type': 'uscitoEvent',
-                       'id_evento': str(idEvento),
-                       'nome_evento': Database.getEventName(idEvento),
-                       'id_user': user,
-                       'name_user': getFacebookName(admin)}
+                        'id_evento': str(idEvento),
+                        'nome_evento': Database.getEventName(idEvento),
+                        'id_user': user,
+                        'name_user': getFacebookName(admin)}
 
             sendNotificationEvent(idEvento, user, msg)
             return 'fatto'
