@@ -34,14 +34,13 @@ def getAdminOfEvent(idEvento):
         cur = sql.cursor()
         cur.execute("SELECT admin FROM party WHERE id_evento=%s", (idEvento,))
         sql.commit()
+        return cur.fetchone()[0]
     except Exception, e:
         sql.rollback()
         print 'error ' + str(e)
         return 'error ' + str(e)
     finally:
         cur.close()
-
-    return cur.fetchone()[0]
 
 
 def getEventName(idEvento):
@@ -49,14 +48,13 @@ def getEventName(idEvento):
         cur = sql.cursor()
         cur.execute("SELECT nome_evento FROM party WHERE id_evento=%s", (idEvento,))
         sql.commit()
+        return cur.fetchone()[0]
     except Exception, e:
         sql.rollback()
         print 'error ' + str(e)
         return 'error ' + str(e)
     finally:
         cur.close()
-
-    return cur.fetchone()[0]
 
 
 def getAttributoName(idAttributo):
@@ -64,11 +62,10 @@ def getAttributoName(idAttributo):
         cur = sql.cursor()
         cur.execute("SELECT domanda FROM attributi WHERE id_attributo=%s", (idAttributo,))
         sql.commit()
+        return cur.fetchone()[0]
     except Exception, e:
         sql.rollback()
         print 'error ' + str(e)
         return 'error ' + str(e)
     finally:
         cur.close()
-
-    return cur.fetchone()[0]
