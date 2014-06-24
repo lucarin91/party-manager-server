@@ -5,7 +5,7 @@ from urllib2 import HTTPError
 
 def getFacebookName(idFacebook):
     try:
-        if isinstance(idFacebook, str):
+        if isinstance(idFacebook, unicode) or isinstance(idFacebook, str):
             print 'getFacebookName: is string ' + idFacebook
             ris = json.load(urllib2.urlopen('http://graph.facebook.com/' + idFacebook))
             return ris['name']
@@ -21,6 +21,6 @@ def getFacebookName(idFacebook):
         else:
             print 'parametro errato'
             return None
-            
+
     except HTTPError:
         print 'Could not download page'
