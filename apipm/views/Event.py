@@ -60,7 +60,7 @@ class Event(MethodView):
 
                 eventId = str(cur.fetchone()[0])
                 for p in userList:
-                    print str(p)
+                    #print str(p)
                     cur.execute(
                         "INSERT INTO evento(id_evento, id_user) VALUES (%s,%s)", (eventId, p))
 

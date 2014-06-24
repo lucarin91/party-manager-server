@@ -1,2 +1,2 @@
-DEBUG=True
-WHERE='deployment'
+DEBUG = True
+WHERE = 'deployment'
