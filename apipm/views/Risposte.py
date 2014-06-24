@@ -79,8 +79,15 @@ class Risposte(MethodView):
                 domanda = cur.fetchone()[0]
                 sql.commit()
                 userName = getFacebookName(user)
-                msg = {'type': 'newRis', 'agg': '0', 'user': user, 'userName': userName, 'id_attributo':
-                       idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
+                msg = {'type': CODE['newRis'],
+                       'agg': '0',
+                       'user': user,
+                       'userName': userName,
+                       'id_attributo': str(idAttributo),
+                       'id_risposta': str(idRisposta),
+                       'domanda': domanda,
+                       'risposta': risposta
+                       }
                 sendNotificationEvent(idEvento, user, msg)
 
             except Exception, e:
@@ -99,8 +106,15 @@ class Risposte(MethodView):
                             domanda = cur.fetchone()[0]
                             sql.commit()
                             userName = getFacebookName(user)
-                            msg = {'type': 'newRis', 'agg': '1', 'user': user, 'userName': userName, 'id_attributo':
-                                   idAttributo, 'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta}
+                            msg = {'type': CODE['newRis'],
+                                   'agg': '1',
+                                   'user': user,
+                                   'userName': userName,
+                                   'id_attributo': str(idAttributo),
+                                   'id_risposta': str(idRisposta),
+                                   'domanda': domanda,
+                                   'risposta': risposta
+                                   }
                             sendNotificationEvent(idEvento, user, msg)
                         except Exception, e:
                             sql.rollback()
@@ -137,8 +151,15 @@ class Risposte(MethodView):
             risposta = cur.fetchone()[0]
             userName = getFacebookName(user)
 
-            msg = {'type': 'risp', 'agg': '0', 'user': user, 'userName': userName, 'id_attributo': idAttributo,
-                   'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta, 'numr': str(risposta[1])}
+            msg = {'type': CODE['risp'],
+                   'agg': '0',
+                   'user': user,
+                   'userName': userName,
+                   'id_attributo': str(idAttributo),
+                   'id_risposta': str(idRisposta),
+                   'domanda': domanda,
+                   'risposta': risposta,
+                   'numr': str(risposta[1])}
             sendNotificationEvent(idEvento, user, msg)
 
         except Exception, e:
@@ -147,7 +168,7 @@ class Risposte(MethodView):
                 # return str(e.diag.constraint_name)
                 if e.diag.constraint_name.find('rispose_pkey') != -1:
                     try:
-                        ris = cur.execute(
+                        cur.execute(
                             "UPDATE rispose SET id_risposta = %s WHERE id_user = %s and id_attributo = %s", (idRisposta, user, idAttributo))
                         sql.commit()
 
@@ -161,8 +182,15 @@ class Risposte(MethodView):
                         risposta = cur.fetchone()[0]
                         userName = getFacebookName(user)
 
-                        msg = {'type': 'Risp', 'agg': '1', 'user': user, 'userName': userName, 'id_attributo': idAttributo,
-                               'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta, 'numr': str(risposta[1])}
+                        msg = {'type': CODE['risp'],
+                               'agg': '1',
+                               'user': user,
+                               'userName': userName,
+                               'id_attributo': str(idAttributo),
+                               'id_risposta': str(idRisposta),
+                               'domanda': domanda,
+                               'risposta': risposta,
+                               'numr': str(risposta[1])}
                         sendNotificationEvent(idEvento, user, msg)
                     except Exception, e:
                         sql.rollback()

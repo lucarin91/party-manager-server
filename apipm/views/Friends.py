@@ -48,7 +48,7 @@ class Friends(MethodView):
 
                 sendNotificationEvent(idEvento,
                                       user,
-                                      {'type': 'addFriends',
+                                      {'type': CODE['addFriends'],
                                        'id_evento': idEvento,
                                        'nome_evento': Database.getEventName(idEvento),
                                        'user_list': Facebook.getFacebookName(userList)})
@@ -72,7 +72,7 @@ class Friends(MethodView):
 
                 sendNotificationEvent(idEvento,
                                       user,
-                                      {'type': 'delFriends',
+                                      {'type': CODE['delFriends'],
                                        'id_evento': str(idEvento),
                                        'nome_evento': Database.getEventName(idEvento),
                                        'admin_name': getFacebookName(admin),

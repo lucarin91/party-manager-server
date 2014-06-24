@@ -69,8 +69,13 @@ class Event(MethodView):
                 sql.commit()
 
                 adminName = getFacebookName(admin)
-                msg = {'type': 'newEvent', 'id_evento': eventId, 'nome_evento': nome_evento,
-                       'admin': admin, 'adminName': adminName, 'num_utenti': str(numUtenti)}
+                msg = {'type': CODE['newEvent'],
+                       'id_evento': eventId,
+                       'nome_evento': nome_evento,
+                       'admin': admin,
+                       'adminName': adminName,
+                       'num_utenti': str(numUtenti)
+                       }
                 sendNotificationEvent(eventId, admin, msg)
 
                     #ris = sendNotification(str(p),msg)
@@ -97,7 +102,7 @@ class Event(MethodView):
             if user == admin:
                 print 'DEBUG: elimina evento'
                 cur.execute("DELETE FROM party WHERE id_evento=%s", (idEvento,))
-                msg = {'type': 'delEvent',
+                msg = {'type': CODE['delEvent'],
                        'id_evento': str(idEvento),
                        'nome_evento': Database.getEventName(idEvento),
                        'admin_name': getFacebookName(admin)}
@@ -105,7 +110,7 @@ class Event(MethodView):
             else:
                 print 'DEBUG: uscito evento'
                 delUtenteFromEvent(idEvento, user)
-                msg = {'type': 'uscitoEvent',
+                msg = {'type': CODE['uscitoEvent'],
                        'id_evento': str(idEvento),
                        'nome_evento': Database.getEventName(idEvento),
                        'id_user': user,

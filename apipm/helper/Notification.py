@@ -7,6 +7,19 @@ gcmSender = GCM('AIzaSyDz0b7i-9n3UPTXXrySRcfK90UfKweweUc')
 from .Database import *
 #from ..helper import sql
 
+CODE = {'newEvent': 1,
+        'newAttr': 2,
+        'newRis': 3,
+        'risp': 4,
+        'agg': 5,
+        'delEvent': 6,
+        'uscitoEvent': 7,
+        'delAttr': 8,
+        'addFriends': 9,
+        'delFriends': 10,
+        'test': 11
+        }
+
 
 def sendNotification(idFacebook, message):
     try:
@@ -54,7 +67,7 @@ def sendNotificationEvent(idEvento, user, message):
             "select array(select id_cell from evento natural join utenti where id_evento=%s and id_user<>%s)", (idEvento, user))
         sql.commit()
         regIds = cur.fetchall()[0][0]
-        #print 'regIds: ' + str(regIds)
+        # print 'regIds: ' + str(regIds)
         response = gcmSender.json_request(registration_ids=regIds, data=message)
 
         # Handling errors
