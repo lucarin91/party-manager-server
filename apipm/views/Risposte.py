@@ -138,7 +138,7 @@ class Risposte(MethodView):
             userName = getFacebookName(user)
 
             msg = {'type': 'risp', 'agg': '0', 'user': user, 'userName': userName, 'id_attributo': idAttributo,
-                   'id_risposta': idRisposta, 'domanda': domanda, 'risposta': str(risposta[0]), 'numr': str(risposta[1])}
+                   'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta, 'numr': str(risposta[1])}
             sendNotificationEvent(idEvento, user, msg)
 
         except Exception, e:
@@ -162,7 +162,7 @@ class Risposte(MethodView):
                         userName = getFacebookName(user)
 
                         msg = {'type': 'Risp', 'agg': '1', 'user': user, 'userName': userName, 'id_attributo': idAttributo,
-                               'id_risposta': idRisposta, 'domanda': domanda, 'risposta': str(risposta[0]), 'numr': str(risposta[1])}
+                               'id_risposta': idRisposta, 'domanda': domanda, 'risposta': risposta, 'numr': str(risposta[1])}
                         sendNotificationEvent(idEvento, user, msg)
                     except Exception, e:
                         sql.rollback()
