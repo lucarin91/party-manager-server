@@ -74,7 +74,7 @@ def login():
                 'https://graph.facebook.com/debug_token?input_token=' + token + '&access_token=' + APPTOKEN))['data']
 
             if (data['is_valid'] == True and data['app_id'] == APPID and data['user_id'] == idFacebook):
-                session['idFacebook'] = data['user_id']
+                session['idFacebook'] = str(ata['user_id'])
                 return 'fatto'
             else:
                 return 'login fallito'
