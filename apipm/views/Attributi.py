@@ -104,7 +104,7 @@ class Attributi(MethodView):
             chiusa = request.form['chiusa']
             user = session['idFacebook']
 
-            print "DEBUG parametri: " + domanda + " " + str(template) + " " + str(risposta) + " " + chiusa + " " + user
+            #print "DEBUG parametri: " + domanda + " " + str(template) + " " + str(risposta) + " " + chiusa + " " + user
             # return domanda+template+risposta+chiusa+user
             try:
                 cur = sql.cursor()
@@ -114,7 +114,7 @@ class Attributi(MethodView):
                 #templateDom = cur.fetchall()
                 # return jsonify(templateDom)
                 #templateList=[p[0] for p in templateDom]
-                print "DEBUG " + str(templateList)
+                #print "DEBUG " + str(templateList)
                 if template is not None and template not in templateList:
                     return 'error template parameter'
 
@@ -128,7 +128,7 @@ class Attributi(MethodView):
                     cur.execute(
                         "INSERT INTO attributi(domanda,id_evento,chiusa) VALUES(%s,%s,%s) RETURNING id_attributo", (domanda, idEvento, chiusa))
                 temp = cur.fetchone()
-                print "DEBUG SQL: " + str(temp)
+                #print "DEBUG SQL: " + str(temp)
                 idAttributo = str(temp[0])
 
                 if risposta is not None:
@@ -141,7 +141,7 @@ class Attributi(MethodView):
                     cur.execute(
                         "INSERT INTO risposte(risposta,id_attributo) VALUES(%s,%s) RETURNING id_risposta", (risposta, idAttributo))
                     test = cur.fetchone()
-                    print "SQL DEBUG: " + str(test)
+                    #print "SQL DEBUG: " + str(test)
                     idRisposta = str(test[0])
                     sql.commit()
                     cur.execute(

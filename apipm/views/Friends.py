@@ -73,7 +73,7 @@ class Friends(MethodView):
                 sendNotificationEvent(idEvento,
                                       user,
                                       {'type': 'delFriends',
-                                       'id_evento': idEvento,
+                                       'id_evento': str(idEvento),
                                        'nome_evento': Database.getEventName(idEvento),
                                        'admin_name': getFacebookName(admin),
                                        'id_user': idFacebook,
