@@ -49,23 +49,18 @@ app.add_url_rule('/event', view_func=eventoView, methods=['GET', 'POST'])
 app.add_url_rule('/event/<int:idEvento>', view_func=eventoView, methods=['DELETE', ])
 
 # ATTRIBUTI
-app.add_url_rule(
-    '/event/<int:idEvento>', view_func=attributoView, methods=['GET', 'POST'])
-app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>',
-                 view_func=attributoView, methods=['DELETE', ])
+app.add_url_rule('/event/<int:idEvento>', view_func=attributoView, methods=['GET', 'POST'])
+app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=attributoView, methods=['DELETE', ])
 
 # RISPOSTE
-app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>',
-                 view_func=risposteView, methods=['GET', 'POST', 'PUT'])
+app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET', 'POST', 'PUT'])
 
 # USER
 app.add_url_rule('/user', view_func=userView, methods=['POST', ])
 
 # FRIENDS
-app.add_url_rule(
-    '/friends/<int:idEvento>', view_func=friendsView, methods=['GET', 'POST'])
-app.add_url_rule('/friends/<int:idEvento>/<idFacebook>',
-                 view_func=friendsView, methods=['DELETE', ])
+app.add_url_rule('/friends/<int:idEvento>', view_func=friendsView, methods=['GET', 'POST'])
+app.add_url_rule('/friends/<int:idEvento>/<idFacebook>', view_func=friendsView, methods=['DELETE', ])
 
 
 @app.route('/login', methods=['GET', 'POST'])

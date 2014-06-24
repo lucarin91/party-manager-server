@@ -97,20 +97,23 @@ class Event(MethodView):
             if user == admin:
                 print 'DEBUG: elimina evento'
                 cur.execute("DELETE FROM party WHERE id_evento=%s", (idEvento,))
+                '''
                 msg = {'type': 'delEvent',
-                        'id_evento': str(idEvento),
-                        'nome_evento': Database.getEventName(idEvento),
-                        'admin_name': getFacebookName(admin)}
+                       'id_evento': str(idEvento),
+                       'nome_evento': Database.getEventName(idEvento),
+                       'admin_name': getFacebookName(admin)}
+                '''
             else:
                 print 'DEBUG: uscito evento'
                 delUtenteFromEvent(idEvento, user)
+                '''
                 msg = {'type': 'uscitoEvent',
-                        'id_evento': str(idEvento),
-                        'nome_evento': Database.getEventName(idEvento),
-                        'id_user': user,
-                        'name_user': getFacebookName(admin)}
-
-            sendNotificationEvent(idEvento, user, msg)
+                       'id_evento': str(idEvento),
+                       'nome_evento': Database.getEventName(idEvento),
+                       'id_user': user,
+                       'name_user': getFacebookName(admin)}
+                '''
+            #sendNotificationEvent(idEvento, user, msg)
             return 'fatto'
 
         except Exception, e:
