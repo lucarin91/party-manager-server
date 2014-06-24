@@ -8,7 +8,7 @@ def getFacebookName(idFacebook):
         if isinstance(idFacebook, unicode) or isinstance(idFacebook, str):
             print 'getFacebookName: is string ' + idFacebook
             ris = json.load(urllib2.urlopen('http://graph.facebook.com/' + idFacebook))
-            print 'risposta facebok: '+str(ris)
+            print 'risposta facebok: ' + str(ris)
             return ris['name']
         elif isinstance(idFacebook, list):
             print 'getFacebookName: is list'
@@ -20,5 +20,7 @@ def getFacebookName(idFacebook):
         else:
             print 'parametro errato'
             return None
-    except HTTPError:
-        print 'Could not download page'
+    except HTTPError, e:
+        print 'Could not download page ' + str(e)
+    except Exception, e:
+        print 'Error getFacebookName: ' + str(e)
