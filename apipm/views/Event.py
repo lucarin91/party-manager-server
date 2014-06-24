@@ -92,6 +92,7 @@ class Event(MethodView):
 
         try:
             admin = Database.getAdminOfEvent(idEvento)
+            cur = sql.cursor()
 
             if user == admin:
                 print 'DEBUG: elimina evento'
@@ -114,6 +115,7 @@ class Event(MethodView):
 
         except Exception, e:
             sql.rollback()
+            print 'error ' + str(e)
             return 'error ' + str(e)
         finally:
             cur.close()
