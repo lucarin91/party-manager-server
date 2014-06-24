@@ -91,8 +91,8 @@ class Event(MethodView):
         print 'sono entrato in elimina'
 
         try:
-            admin = Database.getAdminOfEvent(idEvento)
             cur = sql.cursor()
+            admin = Database.getAdminOfEvent(idEvento)
 
             if user == admin:
                 print 'DEBUG: elimina evento'

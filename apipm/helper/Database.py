@@ -12,10 +12,10 @@ sql = psycopg2.connect(
 
 def delUtenteFromEvent(idEvento, idFacebook):
     try:
-        cur = sql.cursor()
-        cur.execute(
+        cursore = sql.cursor()
+        cursore.execute(
             "DELETE FROM evento WHERE id_evento=%s and id_user=%s", (idEvento, idFacebook))
-        cur.execute(
+        cursore.execute(
             """DELETE FROM rispose
             WHERE id_attributo
             IN (select id_attributo from attributi where id_evento=%s) and id_user=%s""",
@@ -26,46 +26,46 @@ def delUtenteFromEvent(idEvento, idFacebook):
         print 'error ' + str(e)
         return 'error ' + str(e)
     finally:
-        cur.close()
+        cursore.close()
 
 
 def getAdminOfEvent(idEvento):
     try:
-        cur = sql.cursor()
-        cur.execute("SELECT admin FROM party WHERE id_evento=%s", (idEvento,))
+        cursore = sql.cursor()
+        cursore.execute("SELECT admin FROM party WHERE id_evento=%s", (idEvento,))
         sql.commit()
-        return cur.fetchone()[0]
+        return cursore.fetchone()[0]
     except Exception, e:
         sql.rollback()
         print 'error ' + str(e)
         return 'error ' + str(e)
     finally:
-        cur.close()
+        cursore.close()
 
 
 def getEventName(idEvento):
     try:
-        cur = sql.cursor()
-        cur.execute("SELECT nome_evento FROM party WHERE id_evento=%s", (idEvento,))
+        cursore = sql.cursor()
+        cursore.execute("SELECT nome_evento FROM party WHERE id_evento=%s", (idEvento,))
         sql.commit()
-        return cur.fetchone()[0]
+        return cursore.fetchone()[0]
     except Exception, e:
         sql.rollback()
         print 'error ' + str(e)
         return 'error ' + str(e)
     finally:
-        cur.close()
+        cursore.close()
 
 
 def getAttributoName(idAttributo):
     try:
-        cur = sql.cursor()
-        cur.execute("SELECT domanda FROM attributi WHERE id_attributo=%s", (idAttributo,))
+        cursore = sql.cursor()
+        cursore.execute("SELECT domanda FROM attributi WHERE id_attributo=%s", (idAttributo,))
         sql.commit()
-        return cur.fetchone()[0]
+        return cursore.fetchone()[0]
     except Exception, e:
         sql.rollback()
         print 'error ' + str(e)
         return 'error ' + str(e)
     finally:
-        cur.close()
+        cursore.close()
