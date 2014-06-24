@@ -11,33 +11,64 @@ sql = psycopg2.connect(
 
 
 def delUtenteFromEvent(idEvento, idFacebook):
-    cur = sql.cursor()
-    cur.execute(
-        "DELETE FROM evento WHERE id_evento=%s and id_user=%s", (idEvento, idFacebook))
-    cur.execute(
-        """DELETE FROM rispose
-        WHERE id_attributo
-        IN (select id_attributo from attributi where id_evento=%s) and id_user=%s""",
-        (idEvento, idFacebook))
-    sql.commit()
+    try:
+        cur = sql.cursor()
+        cur.execute(
+            "DELETE FROM evento WHERE id_evento=%s and id_user=%s", (idEvento, idFacebook))
+        cur.execute(
+            """DELETE FROM rispose
+            WHERE id_attributo
+            IN (select id_attributo from attributi where id_evento=%s) and id_user=%s""",
+            (idEvento, idFacebook))
+        sql.commit()
+    except Exception, e:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cur.close()
 
 
 def getAdminOfEvent(idEvento):
-    cur = sql.cursor()
-    cur.execute("SELECT admin FROM party WHERE id_evento=%s", (idEvento,))
-    sql.commit()
+    try:
+        cur = sql.cursor()
+        cur.execute("SELECT admin FROM party WHERE id_evento=%s", (idEvento,))
+        sql.commit()
+    except Exception, e:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cur.close()
+
     return cur.fetchone()[0]
 
 
 def getEventName(idEvento):
-    cur = sql.cursor()
-    cur.execute("SELECT nome_evento FROM party WHERE id_evento=%s", (idEvento,))
-    sql.commit()
+    try:
+        cur = sql.cursor()
+        cur.execute("SELECT nome_evento FROM party WHERE id_evento=%s", (idEvento,))
+        sql.commit()
+    except Exception, e:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cur.close()
+
     return cur.fetchone()[0]
 
 
 def getAttributoName(idAttributo):
-    cur = sql.cursor()
-    cur.execute("SELECT domanda FROM attributi WHERE id_attributo=%s", (idAttributo,))
-    sql.commit()
+    try:
+        cur = sql.cursor()
+        cur.execute("SELECT domanda FROM attributi WHERE id_attributo=%s", (idAttributo,))
+        sql.commit()
+    except Exception, e:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cur.close()
+
     return cur.fetchone()[0]
