@@ -17,7 +17,8 @@ CODE = {'newEvent': 1,
         'delAttr': 8,
         'addFriends': 9,
         'delFriends': 10,
-        'test': 11
+        'delRis': 11,
+        'test': 12
         }
 
 

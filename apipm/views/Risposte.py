@@ -235,3 +235,35 @@ class Risposte(MethodView):
 
         return 'fatto'
         '''
+
+    def delete(self, idEvento, idAttributo, idRisposta):
+        user = session['idFacebook']
+        print 'route: elimina RISPOSTA'
+
+        try:
+            admin = Database.getAdminOfEvent(idEvento)           
+            # verificare che la risposta fa parte di quell'evento
+
+            if user == admin:
+                cur = sql.cursor()
+                cur.execute("DELETE FROM risposte WHERE id_risposta=%s", (idRisposta,))
+                sql.commit()
+                sendNotificationEvent(idEvento,
+                                      user,
+                                      {'type': CODE['delRis'],
+                                       'id_evento': str(idEvento),
+                                       'nome_evento': Database.getEventName(idEvento),
+                                       'admin_name': getFacebookName(admin),
+                                       'id_attributo': str(idAttributo),
+                                       'nome_attributo': Database.getAttributoName(idAttributo),
+                                       'id_risposta': str(idRisposta),
+                                       'nome_risposta': Database.getRipostaName(idRisposta)})
+                return 'fatto'
+            else:
+                return 'error: solo l admin puo eliminare una domanda'
+
+        except Exception, e:
+            sql.rollback()
+            return 'error ' + str(e)
+        finally:
+            cur.close()

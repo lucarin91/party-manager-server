@@ -69,3 +69,65 @@ def getAttributoName(idAttributo):
         return 'error ' + str(e)
     finally:
         cursore.close()
+
+
+def getRipostaName(idRisposta):
+    try:
+        cursore = sql.cursor()
+        cursore.execute("SELECT risposta FROM risposte WHERE id_risposta=%s", (idRisposta,))
+        sql.commit()
+        return cursore.fetchone()[0]
+    except Exception, e:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cursore.close()
+
+
+def isUserOfEvent(idEvento, idUser):
+    try:
+        cursore = sql.cursor()
+        cursore.execute("SELECT id_user FROM evento WHERE id_evento=%s and id_user=%s", (idEvento, idUser))
+        sql.commit()
+        ris = cursore.fetchone()[0]
+        print 'isUserOfEvent: ' + str(ris)
+        return True if ris is not None else False
+    except Exception, e:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cursore.close()
+
+
+def isUserOfAttributo(idAttributo, idUser):
+    try:
+        cursore = sql.cursor()
+        cursore.execute("SELECT id_user FROM evento NATURAL JOIN attributi WHERE id_attributo=%s and id_user=%s", (idAttributo, idUser))
+        sql.commit()
+        ris = cursore.fetchone()[0]
+        print 'isUserOfEAttributo: ' + str(ris)
+        return True if ris is not None else False
+    except Exception, e:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cursore.close()
+
+
+def isUserOfRisposta(idRisposta, idUser):
+    try:
+        cursore = sql.cursor()
+        cursore.execute("SELECT id_user FROM evento NATURAL JOIN attributi NATURAL JOIN risposte WHERE id_risposta=%s and id_user=%s", (idRisposta, idUser))
+        sql.commit()
+        ris = cursore.fetchone()[0]
+        print 'isUserOfRisposta: ' + str(ris)
+        return True if ris is not None else False
+    except Exception, e:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cursore.close()
