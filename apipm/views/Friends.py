@@ -41,9 +41,9 @@ class Friends(MethodView):
 
             try:
                 cur = sql.cursor()
-                for user in userList:
+                for u in userList:
                     cur.execute(
-                        "INSERT INTO evento(id_evento, id_user) VALUES(%s,%s)", (idEvento, user))
+                        "INSERT INTO evento(id_evento, id_user) VALUES(%s,%s)", (idEvento, u))
                 sql.commit()
 
                 sendNotificationEvent(idEvento,
