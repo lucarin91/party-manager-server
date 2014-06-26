@@ -83,13 +83,14 @@ def sendNotificationEvent(idEvento, user, message):
     try:
         cur = sql.cursor()
         debug = request.args.get('debug')
+        debug = 'false' if debug is None
         print 'SEND NOTIFICATION: ' + debug
-        if request.args.get('debug') == 'true':
+        if debug == 'true':
             cur.execute(
                 "select array(select id_cell from evento natural join utenti where id_evento=%s)", (idEvento,))
         else:
-            cur.execute("""SELECT array(SELECT id_cell 
-                                        FROM evento NATURAL JOIN utenti 
+            cur.execute("""SELECT array(SELECT id_cell
+                                        FROM evento NATURAL JOIN utenti
                                         WHERE id_evento=%s and id_user<>%s)""",
                         (idEvento, user))
         sql.commit()
