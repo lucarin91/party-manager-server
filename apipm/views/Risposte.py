@@ -22,7 +22,7 @@ class Risposte(MethodView):
 
         try:
             cur = sql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-            cur.execute("""select risposte.id_risposta, risposta, id_user, template 
+            cur.execute("""select risposte.id_risposta, risposta, id_user, template
                         from risposte natural join attributi left join rispose on risposte.id_risposta=rispose.id_risposta
                         where attributi.id_attributo=%s order by id_risposta""", (idAttributo,))
 
@@ -193,6 +193,7 @@ class Risposte(MethodView):
                                'agg': '1',
                                'user': user,
                                'userName': userName,
+                               'id_evento': str(idEvento),
                                'id_attributo': str(idAttributo),
                                'id_risposta': str(idRisposta),
                                'domanda': domanda,
@@ -248,7 +249,7 @@ class Risposte(MethodView):
         print 'route: elimina RISPOSTA'
 
         try:
-            admin = Database.getAdminOfEvent(idEvento)          
+            admin = Database.getAdminOfEvent(idEvento)      
             # verificare che la risposta fa parte di quell'evento
 
             if user == admin:

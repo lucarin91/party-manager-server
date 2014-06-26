@@ -94,7 +94,7 @@ def sendNotificationEvent(idEvento, user, message):
                         (idEvento, user))
         sql.commit()
         regIds = cur.fetchall()[0][0]
-        # print 'regIds: ' + str(regIds)
+        #print 'regIds: ' + str(regIds)
         response = gcmSender.json_request(registration_ids=regIds, data=message)
 
         # Handling errors
