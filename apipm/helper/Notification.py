@@ -82,8 +82,7 @@ def sendNotification(idFacebook, message):
 def sendNotificationEvent(idEvento, user, message):
     try:
         cur = sql.cursor()
-        debug = request.args.get('debug')
-        debug = 'false' if debug is None
+        debug = request.args.get('debug') if request.args.get('debug') is not None else 'false'
         print 'SEND NOTIFICATION: ' + debug
         if debug == 'true':
             cur.execute(
