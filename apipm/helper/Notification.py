@@ -3,6 +3,8 @@ from gcm.gcm import GCMNotRegisteredException
 from gcm.gcm import GCMUnavailableException
 gcmSender = GCM('AIzaSyDz0b7i-9n3UPTXXrySRcfK90UfKweweUc')
 
+from flask import request
+
 #HELPER#
 from .Database import *
 #from ..helper import sql
@@ -21,6 +23,7 @@ CODE = {'newEvent': '1',
         'test': '11'
         }
 '''
+
 
 class CODE:
     t = {'event': '1',
@@ -79,8 +82,16 @@ def sendNotification(idFacebook, message):
 def sendNotificationEvent(idEvento, user, message):
     try:
         cur = sql.cursor()
-        cur.execute(
-            "select array(select id_cell from evento natural join utenti where id_evento=%s and id_user<>%s)", (idEvento, user))
+        debug = request.args.get('debug')
+        print 'SEND NOTIFICATION: ' + debug
+        if request.args.get('debug') == 'true':
+            cur.execute(
+                "select array(select id_cell from evento natural join utenti where id_evento=%s)", (idEvento,))
+        else:
+            cur.execute("""SELECT array(SELECT id_cell 
+                                        FROM evento NATURAL JOIN utenti 
+                                        WHERE id_evento=%s and id_user<>%s)""",
+                        (idEvento, user))
         sql.commit()
         regIds = cur.fetchall()[0][0]
         # print 'regIds: ' + str(regIds)

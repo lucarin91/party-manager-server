@@ -68,6 +68,7 @@ class Event(MethodView):
                     # numUtenti
                 sql.commit()
 
+
                 adminName = getFacebookName(admin)
                 msg = {'type': CODE.t['event'],
                        'method': CODE.m['new'],
@@ -77,6 +78,7 @@ class Event(MethodView):
                        'adminName': adminName,
                        'num_utenti': str(numUtenti)
                        }
+                       
                 sendNotificationEvent(eventId, admin, msg)
 
                     #ris = sendNotification(str(p),msg)
