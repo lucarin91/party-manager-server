@@ -149,10 +149,10 @@ class Risposte(MethodView):
             cur.execute("select domanda from attributi where id_attributo=%s", (idAttributo,))
             sql.commit()
             domanda = cur.fetchone()[0]
-            cur.execute(
-                "select risposta, count(*) from rispose natural join risposte where id_risposta=%s group by risposta", (idRisposta,))
+            
+            cur.execute("SELECT risposta, num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
             sql.commit()
-            risposta = cur.fetchone()[0]
+            risposta = cur.fetchone()
             userName = getFacebookName(user)
 
             msg = {'type': CODE.t['risp'],
@@ -164,7 +164,7 @@ class Risposte(MethodView):
                    'id_attributo': str(idAttributo),
                    'id_risposta': str(idRisposta),
                    'domanda': domanda,
-                   'risposta': risposta,
+                   'risposta': risposta[0],
                    'numr': str(risposta[1])}
             sendNotificationEvent(idEvento, user, msg)
 
@@ -182,10 +182,10 @@ class Risposte(MethodView):
                             "select domanda from attributi where id_attributo=%s", (idAttributo,))
                         sql.commit()
                         domanda = cur.fetchone()[0]
-                        cur.execute(
-                            "select risposta, count(*) from rispose natural join risposte where id_risposta=%s group by risposta", (idRisposta,))
+                        
+                        cur.execute("SELECT risposta, num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
                         sql.commit()
-                        risposta = cur.fetchone()[0]
+                        risposta = cur.fetchone()
                         userName = getFacebookName(user)
 
                         msg = {'type': CODE.t['risp'],
@@ -197,7 +197,7 @@ class Risposte(MethodView):
                                'id_attributo': str(idAttributo),
                                'id_risposta': str(idRisposta),
                                'domanda': domanda,
-                               'risposta': risposta,
+                               'risposta': risposta[0],
                                'numr': str(risposta[1])}
                         sendNotificationEvent(idEvento, user, msg)
                     except Exception, e:
