@@ -7,19 +7,34 @@ gcmSender = GCM('AIzaSyDz0b7i-9n3UPTXXrySRcfK90UfKweweUc')
 from .Database import *
 #from ..helper import sql
 
-CODE = {'newEvent': 1,
-        'newAttr': 2,
-        'newRis': 3,
-        'risp': 4,
-        'agg': 5,
-        'delEvent': 6,
-        'uscitoEvent': 7,
-        'delAttr': 8,
-        'addFriends': 9,
-        'delFriends': 10,
-        'delRis': 11,
-        'test': 12
+'''
+CODE = {'newEvent': '1',
+        'newAttr': '2',
+        'newRis': '3',
+        'risp': '4',
+        'delEvent': '5',
+        'uscitoEvent': '6',
+        'delAttr': '7',
+        'addFriends': '8',
+        'delFriends': '9',
+        'delRis': '10',
+        'test': '11'
         }
+'''
+
+class CODE:
+    t = {'event': '1',
+         'attr': '2',
+         'risp': '3',
+         'user': '4',
+         'test': '5'
+         }
+
+    m = {'new': '1',
+         'mod': '2',
+         'del': '3',
+         'uscito': '4'
+         }
 
 
 def sendNotification(idFacebook, message):

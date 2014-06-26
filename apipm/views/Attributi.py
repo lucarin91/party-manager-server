@@ -132,6 +132,7 @@ class Attributi(MethodView):
                 # print "DEBUG SQL: " + str(temp)
                 idAttributo = str(temp[0])
 
+                idRisposta = None
                 if risposta is not None:
                     '''
                     if template == 'data' and chiusa == str(1):
@@ -154,12 +155,15 @@ class Attributi(MethodView):
 
                 userName = getFacebookName(user)
 
-                msg = {'type': CODE['newAttr'],
+                msg = {'type': CODE.t['attr'],
+                       'method': CODE.m['new'],
                        'user': user,
                        'userName': userName,
+                       'id_evento': str(idEvento),
                        'id_attributo': idAttributo,
                        'domanda': domanda,
                        'risposta': risposta,
+                       'id_risposta': str(idRisposta),
                        'template': template,
                        'chiusa': chiusa,
                        'numd': '1',
@@ -190,7 +194,8 @@ class Attributi(MethodView):
                 sql.commit()
                 sendNotificationEvent(idEvento,
                                       user,
-                                      {'type': CODE['delAttr'],
+                                      {'type': CODE.t['attr'],
+                                       'method': CODE.m['del'],
                                        'id_evento': str(idEvento),
                                        'nome_evento': Database.getEventName(idEvento),
                                        'admin_name': getFacebookName(admin),

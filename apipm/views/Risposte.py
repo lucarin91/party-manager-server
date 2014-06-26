@@ -79,10 +79,12 @@ class Risposte(MethodView):
                 domanda = cur.fetchone()[0]
                 sql.commit()
                 userName = getFacebookName(user)
-                msg = {'type': CODE['newRis'],
+                msg = {'type': CODE.t['risp'],
+                       'method': CODE.m['new'],
                        'agg': '0',
                        'user': user,
                        'userName': userName,
+                       'id_evento': str(idEvento),
                        'id_attributo': str(idAttributo),
                        'id_risposta': str(idRisposta),
                        'domanda': domanda,
@@ -106,10 +108,12 @@ class Risposte(MethodView):
                             domanda = cur.fetchone()[0]
                             sql.commit()
                             userName = getFacebookName(user)
-                            msg = {'type': CODE['newRis'],
+                            msg = {'type': CODE.t['risp'],
+                                   'method': CODE.m['new'],
                                    'agg': '1',
                                    'user': user,
                                    'userName': userName,
+                                   'id_evento': str(idEvento),
                                    'id_attributo': str(idAttributo),
                                    'id_risposta': str(idRisposta),
                                    'domanda': domanda,
@@ -151,10 +155,12 @@ class Risposte(MethodView):
             risposta = cur.fetchone()[0]
             userName = getFacebookName(user)
 
-            msg = {'type': CODE['risp'],
+            msg = {'type': CODE.t['risp'],
+                   'method': CODE.m['mod'],
                    'agg': '0',
                    'user': user,
                    'userName': userName,
+                   'id_evento': str(idEvento),
                    'id_attributo': str(idAttributo),
                    'id_risposta': str(idRisposta),
                    'domanda': domanda,
@@ -182,7 +188,8 @@ class Risposte(MethodView):
                         risposta = cur.fetchone()[0]
                         userName = getFacebookName(user)
 
-                        msg = {'type': CODE['risp'],
+                        msg = {'type': CODE.t['risp'],
+                               'method': CODE.m['mod'],
                                'agg': '1',
                                'user': user,
                                'userName': userName,
@@ -241,7 +248,7 @@ class Risposte(MethodView):
         print 'route: elimina RISPOSTA'
 
         try:
-            admin = Database.getAdminOfEvent(idEvento)           
+            admin = Database.getAdminOfEvent(idEvento)          
             # verificare che la risposta fa parte di quell'evento
 
             if user == admin:
@@ -250,7 +257,8 @@ class Risposte(MethodView):
                 sql.commit()
                 sendNotificationEvent(idEvento,
                                       user,
-                                      {'type': CODE['delRis'],
+                                      {'type': CODE.t['risp'],
+                                       'method': CODE.m['del'],
                                        'id_evento': str(idEvento),
                                        'nome_evento': Database.getEventName(idEvento),
                                        'admin_name': getFacebookName(admin),
