@@ -118,6 +118,7 @@ class Attributi(MethodView):
                     return 'solo ladmin dellevento puo scrivere una domanda chiusa'
 
                 if template is not None:
+                    templateList = Database.getTemplateList()
                     if template not in templateList:
                         return 'error template parameter'
 
