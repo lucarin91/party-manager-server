@@ -138,7 +138,7 @@ class Risposte(MethodView):
         risposta = request.form.get('risposta')
         user = session['idFacebook']
 
-        if rispose is not None:
+        if risposta is not None:
             return self.modificaDomandaChiusa(idEvento, idAttributo, idRisposta, risposta)
 
         try:
