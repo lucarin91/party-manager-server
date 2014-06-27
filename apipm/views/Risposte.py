@@ -234,7 +234,8 @@ class Risposte(MethodView):
                 userName = Facebook.getFacebookName(user)
                 msg = {'type': CODE.t['risp'],
                        'method': CODE.m['mod'],
-                       'chiusa': '1',
+                       'agg': '0',
+                       #'chiusa': '1',
                        'user': user,
                        'userName': userName,
                        'id_evento': str(idEvento),
