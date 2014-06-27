@@ -249,7 +249,7 @@ class Risposte(MethodView):
         print 'route: elimina RISPOSTA'
 
         try:
-            admin = Database.getAdminOfEvent(idEvento)      
+            admin = Database.getAdminOfEvent(idEvento)  
             # verificare che la risposta fa parte di quell'evento
 
             if user == admin:
