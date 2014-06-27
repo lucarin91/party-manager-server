@@ -98,36 +98,38 @@ class Attributi(MethodView):
 
             # TO_DO: controlare che l'evento sia il mio
             domanda = request.form['domanda']
-            template = request.form['template'] if 'template' in request.form else None
-            risposta = request.form['risposta'] if 'risposta' in request.form and request.form[
-                'risposta'] != '' else None
+            template = request.form.get('template')
+            risposta = request.form.get('risposta') if request.form.get('risposta') != '' else None
             chiusa = request.form['chiusa']
             user = session['idFacebook']
+            admin = Database.getAdminOfEvent(idEvento)
             # print 'user e di tipo: ' + str(type(user))
 
             # print "DEBUG parametri: " + domanda + " " + str(template) + " " + str(risposta) + " " + chiusa + " " + user
             # return domanda+template+risposta+chiusa+user
             try:
-                cur = sql.cursor()
-                cur.execute("SELECT array(SELECT name FROM templateDom)")
-                sql.commit()
-                templateList = cur.fetchall()[0][0]
+
                 #templateDom = cur.fetchall()
                 # return jsonify(templateDom)
                 #templateList=[p[0] for p in templateDom]
                 # print "DEBUG " + str(templateList)
-                if template is not None and template not in templateList:
-                    return 'error template parameter'
+
+                if chiusa and user != admin:
+                    return 'solo ladmin dellevento può scrivere una domanda chiusa'
+
+                if template is not None:
+                    if template not in templateList:
+                        return 'error template parameter'
 
                 # return 'template '+template+' chiusa '+chiusa
 
-                if template is not None:
                     cur.execute("""INSERT INTO attributi(domanda,template,id_evento,chiusa) 
                                     VALUES(%s,%s,%s,%s) RETURNING id_attributo""",
                                 (domanda, template, idEvento, chiusa))
                 else:
                     cur.execute(
                         "INSERT INTO attributi(domanda,id_evento,chiusa) VALUES(%s,%s,%s) RETURNING id_attributo", (domanda, idEvento, chiusa))
+
                 temp = cur.fetchone()
                 # print "DEBUG SQL: " + str(temp)
                 idAttributo = str(temp[0])

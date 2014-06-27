@@ -168,3 +168,17 @@ def isAttributoChiuso(idAttributo):
         return 'error ' + str(e)
     finally:
         cur.close()
+
+
+def getTemplateList():
+    try:
+        cur = sql.cursor()
+        cur.execute("SELECT array(SELECT name FROM templateDom)")
+        sql.commit()
+        return cur.fetchall()[0][0]
+    except:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cur.close()
