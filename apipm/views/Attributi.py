@@ -115,7 +115,7 @@ class Attributi(MethodView):
                 # print "DEBUG " + str(templateList)
 
                 if chiusa and user != admin:
-                    return 'solo ladmin dellevento può scrivere una domanda chiusa'
+                    return 'solo ladmin dellevento puo scrivere una domanda chiusa'
 
                 if template is not None:
                     if template not in templateList:
