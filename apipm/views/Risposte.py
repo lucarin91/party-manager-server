@@ -216,6 +216,7 @@ class Risposte(MethodView):
         return idRisposta
 
     def modificaDomandaChiusa(self, idEvento, idAttributo, idRisposta, risposta):
+        print 'entrato in modifica risposta'
         user = session['idFacebook']
         chiusa = Database.isAttributoChiuso(idAttributo)
         admin = Database.getAdminOfEvent(idEvento)
