@@ -222,6 +222,7 @@ class Risposte(MethodView):
 
         if chiusa and user == admin:
             try:
+                cur = sql.cursor()
                 cur.execute("""UPDATE risposte
                                SET risposta=%s
                                WHERE id_risposta=%s""",
