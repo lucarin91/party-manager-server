@@ -108,7 +108,7 @@ class Attributi(MethodView):
             # print "DEBUG parametri: " + domanda + " " + str(template) + " " + str(risposta) + " " + chiusa + " " + user
             # return domanda+template+risposta+chiusa+user
             try:
-
+                cur = sql.cursor()
                 #templateDom = cur.fetchall()
                 # return jsonify(templateDom)
                 #templateList=[p[0] for p in templateDom]
