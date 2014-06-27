@@ -15,10 +15,17 @@ from .views import *
 APPTOKEN = '401068586702319|5f78073b1129c9ff17880a96b6bf9ac9'
 APPID = '401068586702319'
 
+#LOG FILE
+handler = RotatingFileHandler('/var/log/apipm.log', maxBytes=10000, backupCount=1)
+formatter = logging.Formatter("[%(asctime)s] {%(module)s:%(lineno)d} %(levelname)s - %(message)s")
+handler.setFormatter(formatter)
 
 app = Flask(__name__)
 app.config.from_envvar('WSGI_ENV')
 app.secret_key = 'asdasdasd'
+app.logger.addHandler(handler)
+app.logger.setLevel(logging.DEBUG)
+
 #sql = application.config['SQL']
 #Database.sql = sql
 where = app.config['WHERE']
@@ -28,6 +35,10 @@ def requiresLogin(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'idFacebook' not in session:
+            app.logger.warning('A warning occurred (%d apples)', 42)
+            app.logger.error('An error occurred')
+            app.logger.info('Info')
+            app.logger.debug('debugLog')
             return 'session error'
         return f(*args, **kwargs)
     return decorated
