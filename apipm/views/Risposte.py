@@ -132,25 +132,29 @@ class Risposte(MethodView):
         else:
             return 'error POST paramaters'
 
-    def put(self, idEvento, idAttributo):
+    def put(self, idEvento, idAttributo, idRisposta):
 
-        idRisposta = request.form['idRisposta']
+        #idRisposta = request.form.get('idRisposta')
+        risposta = request.form.get('risposta')
         user = session['idFacebook']
+
+        if rispose is not None:
+            return self.modificaDomandaChiusa(idEvento, idAttributo, idRisposta, risposta)
 
         try:
             cur = sql.cursor()
             #cur.execute("UPDATE attributi SET num_risposte = num_risposte + 1 WHERE id_attributo = %s",(idAttributo,))
             #cur.execute("UPDATE risposte SET num_risposta = num_risposta + 1 WHERE id_risposta = %s",(idRisposta,))
             # sql.commit()
-
             cur.execute(
                 "INSERT INTO rispose(id_risposta,id_attributo,id_user) VALUES(%s,%s,%s)", (idRisposta, idAttributo, user))
 
             cur.execute("select domanda from attributi where id_attributo=%s", (idAttributo,))
             sql.commit()
             domanda = cur.fetchone()[0]
-            
-            cur.execute("SELECT risposta, num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
+
+            cur.execute(
+                "SELECT risposta, num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
             sql.commit()
             risposta = cur.fetchone()
             userName = getFacebookName(user)
@@ -182,8 +186,9 @@ class Risposte(MethodView):
                             "select domanda from attributi where id_attributo=%s", (idAttributo,))
                         sql.commit()
                         domanda = cur.fetchone()[0]
-                        
-                        cur.execute("SELECT risposta, num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
+
+                        cur.execute(
+                            "SELECT risposta, num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
                         sql.commit()
                         risposta = cur.fetchone()
                         userName = getFacebookName(user)
@@ -209,6 +214,41 @@ class Risposte(MethodView):
             cur.close()
 
         return idRisposta
+
+    def modificaDomandaChiusa(self, idEvento, idAttributo, idRisposta, risposta):
+        user = session['idFacebook']
+        chiusa = Database.isAttributoChiuso(idAttributo)
+        admin = Database.getAdminOfEvent(idEvento)
+
+        if chiusa and user == admin:
+            try:
+                cur.execute("""UPDATE risposte
+                               SET risposta=%s
+                               WHERE id_risposta=%s""",
+                            (risposta, idRisposta))
+                sql.commit()
+
+                domanda = Database.getAttributoName(idAttributo)
+                userName = Facebook.getFacebookName(user)
+                msg = {'type': CODE.t['risp'],
+                       'method': CODE.m['mod'],
+                       'chiusa': '1',
+                       'user': user,
+                       'userName': userName,
+                       'id_evento': str(idEvento),
+                       'id_attributo': str(idAttributo),
+                       'id_risposta': str(idRisposta),
+                       'domanda': domanda,
+                       'risposta': risposta}
+                sendNotificationEvent(idEvento, user, msg)
+                return 'fatto'
+
+            except Exception, e:
+                sql.rollback()
+                print 'error' + str(e)
+                return 'error' + str(e)
+        else:
+            return 'non sei admin di questo evento'
 
         '''
         try:
@@ -249,7 +289,7 @@ class Risposte(MethodView):
         print 'route: elimina RISPOSTA'
 
         try:
-            admin = Database.getAdminOfEvent(idEvento)  
+            admin = Database.getAdminOfEvent(idEvento)
             # verificare che la risposta fa parte di quell'evento
 
             if user == admin:

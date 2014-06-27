@@ -88,7 +88,8 @@ def getRipostaName(idRisposta):
 def isUserOfEvent(idEvento, idUser):
     try:
         cursore = sql.cursor()
-        cursore.execute("SELECT id_user FROM evento WHERE id_evento=%s and id_user=%s", (idEvento, idUser))
+        cursore.execute(
+            "SELECT id_user FROM evento WHERE id_evento=%s and id_user=%s", (idEvento, idUser))
         sql.commit()
         ris = cursore.fetchone()[0]
         print 'isUserOfEvent: ' + str(ris)
@@ -104,7 +105,8 @@ def isUserOfEvent(idEvento, idUser):
 def isUserOfAttributo(idAttributo, idUser):
     try:
         cursore = sql.cursor()
-        cursore.execute("SELECT id_user FROM evento NATURAL JOIN attributi WHERE id_attributo=%s and id_user=%s", (idAttributo, idUser))
+        cursore.execute(
+            "SELECT id_user FROM evento NATURAL JOIN attributi WHERE id_attributo=%s and id_user=%s", (idAttributo, idUser))
         sql.commit()
         ris = cursore.fetchone()[0]
         print 'isUserOfEAttributo: ' + str(ris)
@@ -120,7 +122,8 @@ def isUserOfAttributo(idAttributo, idUser):
 def isUserOfRisposta(idRisposta, idUser):
     try:
         cursore = sql.cursor()
-        cursore.execute("SELECT id_user FROM evento NATURAL JOIN attributi NATURAL JOIN risposte WHERE id_risposta=%s and id_user=%s", (idRisposta, idUser))
+        cursore.execute(
+            "SELECT id_user FROM evento NATURAL JOIN attributi NATURAL JOIN risposte WHERE id_risposta=%s and id_user=%s", (idRisposta, idUser))
         sql.commit()
         ris = cursore.fetchone()[0]
         print 'isUserOfRisposta: ' + str(ris)
@@ -131,3 +134,37 @@ def isUserOfRisposta(idRisposta, idUser):
         return 'error ' + str(e)
     finally:
         cursore.close()
+
+
+def getTemplateOfAttributo(idAttributo):
+    try:
+        cur = sql.cursor()
+        cur.execute("""SELECT template
+                       FROM attributi
+                       WHERE id_attributo=%s""",
+                    (idAttributo,))
+        sql.commit()
+        return cur.fetchone()[0]
+    except:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cur.close()
+
+
+def isAttributoChiuso(idAttributo):
+    try:
+        cur = sql.cursor()
+        cur.execute("""SELECT chiusa
+                       FROM attributi
+                       WHERE id_attributo=%s""",
+                    (idAttributo,))
+        sql.commit()
+        return cur.fetchone()[0]
+    except:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cur.close()

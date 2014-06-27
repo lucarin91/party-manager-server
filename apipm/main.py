@@ -53,8 +53,8 @@ app.add_url_rule('/event/<int:idEvento>', view_func=attributoView, methods=['GET
 app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=attributoView, methods=['DELETE', ])
 
 # RISPOSTE
-app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET', 'POST', 'PUT'])
-app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>/<int:idRisposta>', view_func=risposteView, methods=['DELETE', ])
+app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET', 'POST'])
+app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>/<int:idRisposta>', view_func=risposteView, methods=['PUT', 'DELETE'])
 
 # USER
 app.add_url_rule('/user', view_func=userView, methods=['POST', ])

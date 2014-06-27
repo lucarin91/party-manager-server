@@ -71,16 +71,20 @@ DECLARE
 numMax INTEGER;
 idNumMax INTEGER;
 newIdMax INTEGER;
+tem VARCHAR;
+risp VARCHAR;
 BEGIN
 	RAISE NOTICE 'entrato in aggMax';
 	SELECT num_risposta INTO numMax FROM risposte WHERE id_attributo = NEW.id_attributo and max = true;
 	SELECT id_risposta INTO idNumMax FROM risposte WHERE id_attributo = NEW.id_attributo and max = true;
+	SELECT template INTO tem FROM attributi WHERE id_attributo = NEW.id_attributo;
 	RAISE NOTICE 'numMax % - idNumMax %s',numMax,idNumMax;
 	RAISE NOTICE 'new.numrisposta % - new.is_attributo %',NEW.num_risposta, NEW.id_attributo;
 	IF idNumMax is NULL OR idNumMax!= NEW.id_risposta THEN
 		IF numMax is NULL OR NEW.num_risposta >= numMax THEN
 			UPDATE risposte SET max=true WHERE id_risposta=NEW.id_risposta;
 			UPDATE risposte SET max=false WHERE id_risposta=idNumMax;
+			idNumMax=NEW.id_risposta;
 			RAISE NOTICE 'sono entrato max=%',NEW.id_risposta;
 		END IF;
 	ELSE
@@ -88,6 +92,14 @@ BEGIN
 		RAISE NOTICE 'sono entrato nellelse newIdMax=%',newIdMax;
 		UPDATE risposte SET max=true WHERE id_risposta=newIdMax;
 		UPDATE risposte SET max=false WHERE id_risposta=NEW.id_risposta;
+		idNumMax=newIdMax;
+	END IF;
+
+	IF tem = 'data' THEN
+		RAISE NOTICE 'template uguale a data';
+		SELECT risposta INTO risp FROM risposte WHERE id_risposta=idNumMax;
+		UPDATE party SET data = risp WHERE id_evento IN (SELECT DISTINCT id_evento FROM risposte NATURAL JOIN attributi WHERE id_risposta=idNumMax); 
+		RAISE NOTICE 'data aggiornata%',risp;
 	END IF;
 	RETURN NEW;
 END;
