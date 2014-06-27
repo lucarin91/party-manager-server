@@ -18,7 +18,7 @@ APPTOKEN = '401068586702319|5f78073b1129c9ff17880a96b6bf9ac9'
 APPID = '401068586702319'
 
 #LOG FILE
-handler = RotatingFileHandler('/var/log/apipm.log', maxBytes=10000, backupCount=1)
+handler = RotatingFileHandler('/var/log/nginx/apipm.log', maxBytes=10000, backupCount=1)
 formatter = logging.Formatter("[%(asctime)s] {%(module)s:%(lineno)d} %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 
