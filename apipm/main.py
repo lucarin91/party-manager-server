@@ -22,12 +22,12 @@ handler = RotatingFileHandler('apipm.log', maxBytes=10000, backupCount=1)
 formatter = logging.Formatter("[%(asctime)s] {%(module)s:%(lineno)d} %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 
-# LOG EMAIL
-#ADMINS = ['lucarin91@gmail.com']
-# mail_handler = SMTPHandler('127.0.0.1',
-#                           'apipm-error@sfcoding.com',
-#                           ADMINS, 'YourApplication Failed')
-# mail_handler.setLevel(logging.ERROR)
+#LOG EMAIL
+ADMINS = ['lucarin91@gmail.com']
+mail_handler = SMTPHandler('127.0.0.1',
+                           'gitlab@sfcoding.com',
+                           ADMINS, 'YourApplication Failed')
+mail_handler.setLevel(logging.ERROR)
 
 
 app = Flask(__name__)
