@@ -23,11 +23,11 @@ formatter = logging.Formatter("[%(asctime)s] {%(module)s:%(lineno)d} %(levelname
 handler.setFormatter(formatter)
 
 # LOG EMAIL
-ADMINS = ['lucarin91@gmail.com']
-mail_handler = SMTPHandler('127.0.0.1',
-                           'apipm-error@sfcoding.com',
-                           ADMINS, 'YourApplication Failed')
-mail_handler.setLevel(logging.ERROR)
+#ADMINS = ['lucarin91@gmail.com']
+# mail_handler = SMTPHandler('127.0.0.1',
+#                           'apipm-error@sfcoding.com',
+#                           ADMINS, 'YourApplication Failed')
+# mail_handler.setLevel(logging.ERROR)
 
 
 app = Flask(__name__)
@@ -35,7 +35,7 @@ app.config.from_envvar('WSGI_ENV')
 app.secret_key = 'asdasdasd'
 app.logger.addHandler(handler)
 app.logger.setLevel(logging.DEBUG)
-app.logger.addHandler(mail_handler)
+# app.logger.addHandler(mail_handler)
 
 #sql = application.config['SQL']
 #Database.sql = sql
@@ -112,7 +112,6 @@ def logout():
     # remove the username from the session if it's there
     session.pop('idFacebook', None)
     return 'fatto'
-
 
 '''
 DEBUG FUNCTION

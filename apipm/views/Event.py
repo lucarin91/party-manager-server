@@ -96,6 +96,42 @@ class Event(MethodView):
         else:
             return 'error POST parameters'
 
+    def put(self, idEvento):
+        user = session['idFacebook']
+        nomeEvento = request.form.get('name')
+        if nomeEvento == '':
+            app.logger.warning('nome evento errato')
+            return 'nome evento errato'
+        app.logger.info('MODIFICA NOME EVENTO')
+
+        try:
+            cur = sql.cursor()
+            admin = Database.getAdminOfEvent(idEvento)
+
+            if user == admin and nomeEvento:
+                nomeEventoVecchio = Database.getEventName(idEvento)
+                app.logger.debug('modifca nome admin')
+                cur.execute(
+                    "UPDATE party SET nome_evento=%s WHERE id_evento=%s", (nomeEvento, idEvento,))
+                msg = {'type': CODE.t['event'],
+                       'method': CODE.m['mod'],
+                       'id_evento': str(idEvento),
+                       'nome_evento_vec': nomeEventoVecchio,
+                       'nome_evento': nomeEvento,
+                       'admin_name': getFacebookName(admin)}
+
+                sendNotificationEvent(idEvento, user, msg)
+                return 'fatto'
+            else:
+                return 'solo ladmin puo modificare il nome di un evento'
+
+        except Exception, e:
+            sql.rollback()
+            app.logger.error(str(e))
+            return 'error'
+        finally:
+            cur.close()
+
     def delete(self, idEvento):
         user = session['idFacebook']
         print 'sono entrato in elimina'

@@ -64,7 +64,7 @@ insert into templateDom(name) values('luogoE');
 INSERT INTO templateDom(name) VALUES ('sino');
 
 
-
+/*
 CREATE OR REPLACE FUNCTION aggMax() RETURNS TRIGGER AS
 $BODY$
 DECLARE
@@ -94,6 +94,32 @@ BEGIN
 		UPDATE risposte SET max=false WHERE id_risposta=NEW.id_risposta;
 		idNumMax=newIdMax;
 	END IF;
+
+	IF tem = 'data' THEN
+		RAISE NOTICE 'template uguale a data';
+		SELECT risposta INTO risp FROM risposte WHERE id_risposta=idNumMax;
+		UPDATE party SET data = risp WHERE id_evento IN (SELECT DISTINCT id_evento FROM risposte NATURAL JOIN attributi WHERE id_risposta=idNumMax); 
+		RAISE NOTICE 'data aggiornata%',risp;
+	END IF;
+	RETURN NEW;
+END;
+$BODY$
+LANGUAGE PLPGSQL;
+*/
+
+CREATE OR REPLACE FUNCTION aggMax() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+idNumMax INTEGER;
+tem VARCHAR;
+risp VARCHAR;
+BEGIN
+	RAISE NOTICE 'entrato in aggMax';
+	UPDATE risposte SET max=false WHERE id_attributo= NEW.id_attributo and max=true;
+	
+	SELECT id_risposta INTO idNumMax FROM risposte WHERE id_attributo=NEW.id_attributo ORDER BY num_risposta DESC LIMIT 1;
+	UPDATE risposte SET max=true WHERE id_risposta = idNumMax;
+	SELECT template INTO tem FROM risposte NATURAL JOIN attributi WHERE id_risposta = idNumMax;
 
 	IF tem = 'data' THEN
 		RAISE NOTICE 'template uguale a data';
