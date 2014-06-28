@@ -35,7 +35,7 @@ app.config.from_envvar('WSGI_ENV')
 app.secret_key = 'asdasdasd'
 app.logger.addHandler(handler)
 app.logger.setLevel(logging.DEBUG)
-# app.logger.addHandler(mail_handler)
+app.logger.addHandler(mail_handler)
 
 #sql = application.config['SQL']
 #Database.sql = sql
