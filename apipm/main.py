@@ -54,7 +54,7 @@ def requiresLogin(f):
 @app.route('/')
 @requiresLogin
 def index():
-    return 'ciao ' + where
+    return 'ciao ' + where + ss
 
 eventoView = requiresLogin(Event.as_view('event'))
 attributoView = requiresLogin(Attributi.as_view('attr'))
