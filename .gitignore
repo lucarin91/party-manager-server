@@ -2,3 +2,4 @@ database.db
 venv
 *.pyc
 *~
+apipm.log
