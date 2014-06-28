@@ -1,6 +1,7 @@
 import json
 import urllib2
 from urllib2 import HTTPError
+from flask import current_app as app
 
 
 def getFacebookName(idFacebook):

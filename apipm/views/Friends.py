@@ -6,6 +6,7 @@ from flask import request
 from flask import jsonify
 from flask import session
 from flask.views import MethodView
+from flask import current_app as app
 
 #HELPER#
 from ..helper import *

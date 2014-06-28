@@ -7,6 +7,7 @@ from flask import request
 from flask import jsonify
 from flask import session
 from flask.views import MethodView
+from flask import current_app as app
 
 #HELPER#
 from ..helper import *
@@ -18,7 +19,7 @@ class Risposte(MethodView):
     def get(self, idEvento, idAttributo):
         # controllare che l evento e il mio
 
-        user = session['idFacebook']
+        #user = session['idFacebook']
 
         try:
             cur = sql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)

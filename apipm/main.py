@@ -7,7 +7,7 @@ from flask import render_template
 from flask import session
 from functools import wraps
 import logging
-from logging.handlers import RotatingFileHandler
+from logging.handlers import RotatingFileHandler, SMTPHandler
 
 #PACKAGE APIPM#
 from .helper import *
@@ -17,16 +17,25 @@ from .views import *
 APPTOKEN = '401068586702319|5f78073b1129c9ff17880a96b6bf9ac9'
 APPID = '401068586702319'
 
-#LOG FILE
+# LOG FILE
 handler = RotatingFileHandler('apipm.log', maxBytes=10000, backupCount=1)
 formatter = logging.Formatter("[%(asctime)s] {%(module)s:%(lineno)d} %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
+
+# LOG EMAIL
+ADMINS = ['lucarin91@gmail.com']
+mail_handler = SMTPHandler('127.0.0.1',
+                           'apipm-error@sfcoding.com',
+                           ADMINS, 'YourApplication Failed')
+mail_handler.setLevel(logging.ERROR)
+
 
 app = Flask(__name__)
 app.config.from_envvar('WSGI_ENV')
 app.secret_key = 'asdasdasd'
 app.logger.addHandler(handler)
 app.logger.setLevel(logging.DEBUG)
+app.logger.addHandler(mail_handler)
 
 #sql = application.config['SQL']
 #Database.sql = sql
@@ -37,10 +46,6 @@ def requiresLogin(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'idFacebook' not in session:
-            app.logger.warning('A warning occurred (%d apples)', 42)
-            app.logger.error('An error occurred')
-            app.logger.info('Info')
-            app.logger.debug('debugLog')
             return 'session error'
         return f(*args, **kwargs)
     return decorated
@@ -63,18 +68,22 @@ app.add_url_rule('/event/<int:idEvento>', view_func=eventoView, methods=['DELETE
 
 # ATTRIBUTI
 app.add_url_rule('/event/<int:idEvento>', view_func=attributoView, methods=['GET', 'POST'])
-app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=attributoView, methods=['DELETE', ])
+app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>',
+                 view_func=attributoView, methods=['DELETE', ])
 
 # RISPOSTE
-app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>', view_func=risposteView, methods=['GET', 'POST'])
-app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>/<int:idRisposta>', view_func=risposteView, methods=['PUT', 'DELETE'])
+app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>',
+                 view_func=risposteView, methods=['GET', 'POST'])
+app.add_url_rule('/event/<int:idEvento>/<int:idAttributo>/<int:idRisposta>',
+                 view_func=risposteView, methods=['PUT', 'DELETE'])
 
 # USER
 app.add_url_rule('/user', view_func=userView, methods=['POST', ])
 
 # FRIENDS
 app.add_url_rule('/friends/<int:idEvento>', view_func=friendsView, methods=['GET', 'POST'])
-app.add_url_rule('/friends/<int:idEvento>/<idFacebook>', view_func=friendsView, methods=['DELETE', ])
+app.add_url_rule('/friends/<int:idEvento>/<idFacebook>',
+                 view_func=friendsView, methods=['DELETE', ])
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -93,7 +102,7 @@ def login():
             else:
                 return 'login fallito'
         except Exception, e:
-            return 'login error '+str(e)
+            return 'login error ' + str(e)
     else:
         return render_template('login.html')
 

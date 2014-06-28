@@ -6,15 +6,18 @@ from flask import request
 from flask import jsonify
 from flask import session
 from flask.views import MethodView
+from flask import current_app as app
 
 #HELPER#
 from ..helper import *
 #from ..helper.Database import sql
+#from  ..main import log
 
 
 class Event(MethodView):
 
     def get(self):
+        app.logger.info('Get Event')
         facebookId = session['idFacebook']
         try:
             cur = sql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -68,7 +71,6 @@ class Event(MethodView):
                     # numUtenti
                 sql.commit()
 
-
                 adminName = getFacebookName(admin)
                 msg = {'type': CODE.t['event'],
                        'method': CODE.m['new'],
@@ -78,7 +80,7 @@ class Event(MethodView):
                        'adminName': adminName,
                        'num_utenti': str(numUtenti)
                        }
-                       
+
                 sendNotificationEvent(eventId, admin, msg)
 
                     #ris = sendNotification(str(p),msg)

@@ -4,6 +4,7 @@ from gcm.gcm import GCMUnavailableException
 gcmSender = GCM('AIzaSyDz0b7i-9n3UPTXXrySRcfK90UfKweweUc')
 
 from flask import request
+from flask import current_app as app
 
 #HELPER#
 from .Database import *

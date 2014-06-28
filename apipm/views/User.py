@@ -4,6 +4,7 @@ import psycopg2.extras
 from flask import request
 from flask import session
 from flask.views import MethodView
+from flask import current_app as app
 
 #HELPER#
 from ..helper import *

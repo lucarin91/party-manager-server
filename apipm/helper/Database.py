@@ -1,6 +1,7 @@
 import psycopg2
 import psycopg2.extras
 import os
+from flask import current_app as app
 
 sql = psycopg2.connect(
     database='pm_database',
