@@ -23,9 +23,9 @@ formatter = logging.Formatter("[%(asctime)s] {%(module)s:%(lineno)d} %(levelname
 handler.setFormatter(formatter)
 
 #LOG EMAIL
-ADMINS = ['lucarin91@gmail.com']
+ADMINS = ['lucarin91@gmail.com', 'fedo.coro@gmail.com']
 mail_handler = SMTPHandler('127.0.0.1',
-                           'gitlab@sfcoding.com',
+                           'apipm-error@sfcoding.com',
                            ADMINS, 'YourApplication Failed')
 mail_handler.setLevel(logging.ERROR)
 
