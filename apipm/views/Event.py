@@ -115,6 +115,7 @@ class Event(MethodView):
                     "UPDATE party SET nome_evento=%s WHERE id_evento=%s", (nomeEvento, idEvento,))
                 msg = {'type': CODE.t['event'],
                        'method': CODE.m['mod'],
+                       'name_user': user,
                        'id_evento': str(idEvento),
                        'nome_evento_vec': nomeEventoVecchio,
                        'nome_evento': nomeEvento,
