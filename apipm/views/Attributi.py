@@ -157,8 +157,8 @@ class Attributi(MethodView):
 
                 sql.commit()
 
+                '''
                 userName = getFacebookName(user)
-
                 msg = {'type': CODE.t['attr'],
                        'method': CODE.m['new'],
                        'user': user,
@@ -173,7 +173,20 @@ class Attributi(MethodView):
                        'numd': '1',
                        'numr': '1'
                        }
-                sendNotificationEvent(idEvento, user, msg)
+                '''
+                sendNotificationEvent(idEvento, user, {'type': code.type.attributo,
+                                                       'method': code.method.new,
+                                                       code.user.id: user,
+                                                       code.evento.id: str(idEvento),
+                                                       code.attributo.id: idAttributo,
+                                                       code.attributo.nome: domanda,
+                                                       code.risposta.nome: risposta,
+                                                       code.risposta.id: str(idRisposta),
+                                                       code.attributo.template: template,
+                                                       code.attributo.chiusa: chiusa,
+                                                       code.attributo.num: '1',
+                                                       code.risposta.num: '1'
+                                                       })
 
             except Exception, e:
                 sql.rollback()
@@ -198,13 +211,12 @@ class Attributi(MethodView):
                 sql.commit()
                 sendNotificationEvent(idEvento,
                                       user,
-                                      {'type': CODE.t['attr'],
-                                       'method': CODE.m['del'],
-                                       'id_evento': str(idEvento),
-                                       'nome_evento': Database.getEventName(idEvento),
-                                       'admin_name': getFacebookName(admin),
-                                       'id_attributo': str(idAttributo),
-                                       'nome_attributo': Database.getAttributoName(idAttributo)})
+                                      {'type': code.type.attributo CODE.t['attr'],
+                                       'method': code.method.delete,
+                                       code.evento.id: str(idEvento),
+                                       code.user.id: user,
+                                       code.user.idAdmin: admin,
+                                       code.attributo.id: str(idAttributo)})
                 return 'fatto'
             else:
                 return 'error: solo l admin puo eliminare una domanda'

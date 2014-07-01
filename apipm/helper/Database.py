@@ -146,7 +146,7 @@ def getTemplateOfAttributo(idAttributo):
                     (idAttributo,))
         sql.commit()
         return cur.fetchone()[0]
-    except:
+    except Exception, e:
         sql.rollback()
         print 'error ' + str(e)
         return 'error ' + str(e)
@@ -163,7 +163,7 @@ def isAttributoChiuso(idAttributo):
                     (idAttributo,))
         sql.commit()
         return cur.fetchone()[0]
-    except:
+    except Exception, e:
         sql.rollback()
         print 'error ' + str(e)
         return 'error ' + str(e)
@@ -177,9 +177,24 @@ def getTemplateList():
         cur.execute("SELECT array(SELECT name FROM templateDom)")
         sql.commit()
         return cur.fetchall()[0][0]
-    except:
+    except Exception, e:
         sql.rollback()
         print 'error ' + str(e)
         return 'error ' + str(e)
     finally:
         cur.close()
+
+
+def getNumUtentiEvent(idEvento):
+    try:
+        cur = sql.cursor()
+        cur.execute("SELECT num_utenti from party where id_evento=%s", (idEvento,))
+        sql.commit()
+        return cur.fetchall()[0]
+    except Exception, e:
+        sql.rollback()
+        print 'error ' + str(e)
+        return 'error ' + str(e)
+    finally:
+        cur.close()
+        

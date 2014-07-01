@@ -8,37 +8,51 @@ from flask import current_app as app
 
 #HELPER#
 from .Database import *
-#from ..helper import sql
-
-'''
-CODE = {'newEvent': '1',
-        'newAttr': '2',
-        'newRis': '3',
-        'risp': '4',
-        'delEvent': '5',
-        'uscitoEvent': '6',
-        'delAttr': '7',
-        'addFriends': '8',
-        'delFriends': '9',
-        'delRis': '10',
-        'test': '11'
-        }
-'''
+from ..helper import *
 
 
-class CODE:
-    t = {'event': '1',
-         'attr': '2',
-         'risp': '3',
-         'user': '4',
-         'test': '5'
-         }
+class code:
 
-    m = {'new': '1',
-         'mod': '2',
-         'del': '3',
-         'uscito': '4'
-         }
+    class type:
+        evento = '1'
+        attributo = '2'
+        risposta = '3'
+        user = '4'
+        test = '5'
+
+    class method:
+        new = '1'
+        modify = '2'
+        delete = '3'
+        uscito = '4'
+
+    class evento:
+        id = 'id_evento'
+        nome = 'nome_evento'
+        num = 'num_utenti'
+        nomeVecchio = 'nome_evento_vec'
+
+    class attributo:
+        id = 'id_attributo'
+        nome = 'domanda'
+        template = 'template'
+        chiusa = 'chiusa'
+        num = 'numd'
+
+    class risposta:
+        id = 'id_risposta'
+        nome = 'nome_risposta'
+        agg = 'agg'
+        num = 'numr'
+
+    class user:
+        id = 'id_user'
+        nome = 'nome_user'
+        idAdmin = 'id_admin'
+        nomeAdmin = 'nomeAdmin'
+        list = 'user_list'
+        idDelete = 'id_user_delete'
+        nomeDelete = 'nome_user_delete'
 
 
 def sendNotification(idFacebook, message):
@@ -95,8 +109,8 @@ def sendNotificationEvent(idEvento, user, message):
                         (idEvento, user))
         sql.commit()
         regIds = cur.fetchall()[0][0]
-        #print 'regIds: ' + str(regIds)
-        response = gcmSender.json_request(registration_ids=regIds, data=message)
+        # print 'regIds: ' + str(regIds)
+        response = gcmSender.json_request(registration_ids=regIds, data=factoryMessage(message))
 
         # Handling errors
         if 'errors' in response:
@@ -120,3 +134,27 @@ def sendNotificationEvent(idEvento, user, message):
         print 'error GCM: ' + str(e)
     finally:
         cur.close()
+
+
+def factoryMessage(msg):
+    idEvento = msg.get(code.evento.id)
+    if code.user.idAdmin not in msg:
+        msg[code.user.idAdmin] = getAdminOfEvent(idEvento)
+
+    if code.evento.num not in msg:
+        msg[code.evento.num] = getNumUtentiEvent(idEvento)
+
+    if code.evento.id in msg and code.evento.nome not in msg:
+        msg[code.evento.nome] = getEventName(idEvento)
+
+    if code.attributo.id in msg and code.attributo.nome not in msg:
+        msg[code.attributo.nome] = getAttributoName(msg.get(code.attributo.id))
+
+    if code.risposta.id in msg and code.risposta.nome not in msg:
+        msg[code.risposta.nome] = getRipostaName(msg.get(code.risposta.id))
+
+    if code.user.id in msg and code.user.nome not in msg:
+        msg[code.user.nome] = Facebook.getFacebookName(msg.get(code.user.id))
+
+    app.logger.debug(str(msg))
+    return msg

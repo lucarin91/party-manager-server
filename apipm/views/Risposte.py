@@ -75,23 +75,20 @@ class Risposte(MethodView):
 
                 cur.execute(
                     "INSERT INTO rispose(id_risposta,id_attributo,id_user) VALUES(%s,%s,%s)", (idRisposta, idAttributo, user))
-
+                '''
                 cur.execute("select domanda from attributi where id_attributo=%s", (idAttributo,))
                 domanda = cur.fetchone()[0]
                 sql.commit()
-                userName = getFacebookName(user)
-                msg = {'type': CODE.t['risp'],
-                       'method': CODE.m['new'],
-                       'agg': '0',
-                       'user': user,
-                       'userName': userName,
-                       'id_evento': str(idEvento),
-                       'id_attributo': str(idAttributo),
-                       'id_risposta': str(idRisposta),
-                       'domanda': domanda,
-                       'risposta': risposta
-                       }
-                sendNotificationEvent(idEvento, user, msg)
+                '''
+                sendNotificationEvent(idEvento, user, {'type': code.type.risposta,
+                                                       'method': code.method.new,
+                                                       code.risposta.agg: '0',
+                                                       code.user.id: user,
+                                                       code.evento.id: str(idEvento),
+                                                       code.attributo.id: str(idAttributo),
+                                                       code.risposta.id: str(idRisposta),
+                                                       code.risposta.nome: risposta
+                                                       })
 
             except Exception, e:
                 if isinstance(e, psycopg2.Error):
@@ -103,24 +100,23 @@ class Risposte(MethodView):
                             cur.execute(
                                 "UPDATE rispose SET id_risposta = %s WHERE id_user = %s and id_attributo = %s", (idRisposta, user, idAttributo))
                             sql.commit()
-
+                            '''
                             cur.execute(
                                 "select domanda from attributi where id_attributo=%s", (idAttributo,))
                             domanda = cur.fetchone()[0]
                             sql.commit()
-                            userName = getFacebookName(user)
-                            msg = {'type': CODE.t['risp'],
-                                   'method': CODE.m['new'],
-                                   'agg': '1',
-                                   'user': user,
-                                   'userName': userName,
-                                   'id_evento': str(idEvento),
-                                   'id_attributo': str(idAttributo),
-                                   'id_risposta': str(idRisposta),
-                                   'domanda': domanda,
-                                   'risposta': risposta
-                                   }
-                            sendNotificationEvent(idEvento, user, msg)
+                            '''
+                            sendNotificationEvent(idEvento,
+                                                  user,
+                                                  {'type': code.type.risposta,
+                                                   'method': code.method.new,
+                                                   code.risposta.agg: '1',
+                                                   code.user.id: user,
+                                                   code.evento.id: str(idEvento),
+                                                   code.attributo.id: str(idAttributo),
+                                                   code.risposta.id: str(idRisposta),
+                                                   code.risposta.nome: risposta
+                                                   })
                         except Exception, e:
                             sql.rollback()
                             return 'error' + str(e)
@@ -149,29 +145,24 @@ class Risposte(MethodView):
             # sql.commit()
             cur.execute(
                 "INSERT INTO rispose(id_risposta,id_attributo,id_user) VALUES(%s,%s,%s)", (idRisposta, idAttributo, user))
-
+            '''
             cur.execute("select domanda from attributi where id_attributo=%s", (idAttributo,))
             sql.commit()
             domanda = cur.fetchone()[0]
-
+            '''
             cur.execute(
                 "SELECT risposta, num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
             sql.commit()
             risposta = cur.fetchone()
-            userName = getFacebookName(user)
 
-            msg = {'type': CODE.t['risp'],
-                   'method': CODE.m['mod'],
-                   'agg': '0',
-                   'user': user,
-                   'userName': userName,
-                   'id_evento': str(idEvento),
-                   'id_attributo': str(idAttributo),
-                   'id_risposta': str(idRisposta),
-                   'domanda': domanda,
-                   'risposta': risposta[0],
-                   'numr': str(risposta[1])}
-            sendNotificationEvent(idEvento, user, msg)
+            sendNotificationEvent(idEvento, user, {'type': code.type.risposta,
+                                                   'method': code.method.modify,
+                                                   code.risposta.agg: '0',
+                                                   code.user.id: user,
+                                                   code.evento.id: str(idEvento),
+                                                   code.attributo.id: str(idAttributo),
+                                                   code.risposta.id: str(idRisposta),
+                                                   code.risposta.num: str(risposta[1])})
 
         except Exception, e:
             if isinstance(e, psycopg2.Error):
@@ -182,30 +173,25 @@ class Risposte(MethodView):
                         cur.execute(
                             "UPDATE rispose SET id_risposta = %s WHERE id_user = %s and id_attributo = %s", (idRisposta, user, idAttributo))
                         sql.commit()
-
+                        '''
                         cur.execute(
                             "select domanda from attributi where id_attributo=%s", (idAttributo,))
                         sql.commit()
                         domanda = cur.fetchone()[0]
-
+                        '''
                         cur.execute(
                             "SELECT risposta, num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
                         sql.commit()
                         risposta = cur.fetchone()
-                        userName = getFacebookName(user)
 
-                        msg = {'type': CODE.t['risp'],
-                               'method': CODE.m['mod'],
-                               'agg': '1',
-                               'user': user,
-                               'userName': userName,
-                               'id_evento': str(idEvento),
-                               'id_attributo': str(idAttributo),
-                               'id_risposta': str(idRisposta),
-                               'domanda': domanda,
-                               'risposta': risposta[0],
-                               'numr': str(risposta[1])}
-                        sendNotificationEvent(idEvento, user, msg)
+                        sendNotificationEvent(idEvento, user, {'type': code.type.risposta,
+                                                               'method': code.method.modify,
+                                                               code.risposta.agg: '1',
+                                                               code.user.id: user,
+                                                               code.evento.id: str(idEvento),
+                                                               code.attributo.id: str(idAttributo),
+                                                               code.risposta.id: str(idRisposta),
+                                                               code.risposta.num: str(risposta[1])})
                     except Exception, e:
                         sql.rollback()
                         return 'error' + str(e)
@@ -231,20 +217,13 @@ class Risposte(MethodView):
                             (risposta, idRisposta))
                 sql.commit()
 
-                domanda = Database.getAttributoName(idAttributo)
-                userName = Facebook.getFacebookName(user)
-                msg = {'type': CODE.t['risp'],
-                       'method': CODE.m['mod'],
-                       'agg': '0',
-                       #'chiusa': '1',
-                       'user': user,
-                       'userName': userName,
-                       'id_evento': str(idEvento),
-                       'id_attributo': str(idAttributo),
-                       'id_risposta': str(idRisposta),
-                       'domanda': domanda,
-                       'risposta': risposta}
-                sendNotificationEvent(idEvento, user, msg)
+                sendNotificationEvent(idEvento, user, {'type': code.type.risposta,
+                                                       'method': code.method.modify,
+                                                       code.risposta.agg: '0',
+                                                       code.user.id: user,
+                                                       code.evento.id: str(idEvento),
+                                                       code.attributo.id: str(idAttributo),
+                                                       code.risposta.id: str(idRisposta)})
                 return 'fatto'
 
             except Exception, e:
@@ -302,15 +281,13 @@ class Risposte(MethodView):
                 sql.commit()
                 sendNotificationEvent(idEvento,
                                       user,
-                                      {'type': CODE.t['risp'],
-                                       'method': CODE.m['del'],
-                                       'id_evento': str(idEvento),
-                                       'nome_evento': Database.getEventName(idEvento),
-                                       'admin_name': getFacebookName(admin),
-                                       'id_attributo': str(idAttributo),
-                                       'nome_attributo': Database.getAttributoName(idAttributo),
-                                       'id_risposta': str(idRisposta),
-                                       'nome_risposta': Database.getRipostaName(idRisposta)})
+                                      {'type': code.type.risposta,
+                                       'method': code.method.delete,
+                                       code.user.id: user,
+                                       code.evento.id: str(idEvento),
+                                       code.user.idAdmin: admin,
+                                       code.attributo.id: str(idAttributo),
+                                       code.risposta.id: str(idRisposta)})
                 return 'fatto'
             else:
                 return 'error: solo l admin puo eliminare una domanda'

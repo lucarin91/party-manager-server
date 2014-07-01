@@ -49,11 +49,11 @@ class Friends(MethodView):
 
                 sendNotificationEvent(idEvento,
                                       user,
-                                      {'type': CODE.t['user'],
-                                       'method': CODE.m['new'],
-                                       'id_evento': idEvento,
-                                       'nome_evento': Database.getEventName(idEvento),
-                                       'user_list': Facebook.getFacebookName(userList)})
+                                      {'type': code.type.user,
+                                       'method': code.method.new,
+                                       code.user.id: user,
+                                       code.evento.id: idEvento,
+                                       code.user.list: Facebook.getFacebookName(userList)})
                 return 'fatto'
 
             except Exception, e:
@@ -74,13 +74,13 @@ class Friends(MethodView):
 
                 sendNotificationEvent(idEvento,
                                       user,
-                                      {'type': CODE.t['user'],
-                                       'method': CODE.m['del'],
-                                       'id_evento': str(idEvento),
-                                       'nome_evento': Database.getEventName(idEvento),
-                                       'admin_name': getFacebookName(admin),
-                                       'id_user': idFacebook,
-                                       'user_name': getFacebookName(idFacebook)})
+                                      {'type': code.type.user,
+                                       'method': code.method.delete,
+                                       code.evento.id: str(idEvento),
+                                       code.user.admin: admin,
+                                       code.user.id: user,
+                                       code.user.idDelete: idFacebook,
+                                       code.user.nomeDelete: getFacebookName(idFacebook)})
 
                 return 'fatto'
             else:

@@ -71,17 +71,14 @@ class Event(MethodView):
                     # numUtenti
                 sql.commit()
 
-                adminName = getFacebookName(admin)
-                msg = {'type': CODE.t['event'],
-                       'method': CODE.m['new'],
-                       'id_evento': eventId,
-                       'nome_evento': nome_evento,
-                       'admin': admin,
-                       'adminName': adminName,
-                       'num_utenti': str(numUtenti)
-                       }
-
-                sendNotificationEvent(eventId, admin, msg)
+                sendNotificationEvent(eventId, admin, {'type': code.type.evento,
+                                                       'method': code.method.new,
+                                                       code.evento.id: eventId,
+                                                       code.evento.nome: nome_evento,
+                                                       code.user.idAdmin: admin,
+                                                       code.user.id: admin,
+                                                       code.evento.num: str(numUtenti)
+                                                       })
 
                     #ris = sendNotification(str(p),msg)
                     # if ris is not None:
@@ -113,15 +110,14 @@ class Event(MethodView):
                 app.logger.debug('modifca nome admin')
                 cur.execute(
                     "UPDATE party SET nome_evento=%s WHERE id_evento=%s", (nomeEvento, idEvento,))
-                msg = {'type': CODE.t['event'],
-                       'method': CODE.m['mod'],
-                       'name_user': user,
-                       'id_evento': str(idEvento),
-                       'nome_evento_vec': nomeEventoVecchio,
-                       'nome_evento': nomeEvento,
-                       'admin_name': getFacebookName(admin)}
-
-                sendNotificationEvent(idEvento, user, msg)
+                
+                sendNotificationEvent(idEvento, user, {'type': code.type.evento,
+                                                       'method': code.method.modify,
+                                                       code.user.id: user,
+                                                       code.evento.id: str(idEvento),
+                                                       code.evento.nomeVecchio: nomeEventoVecchio,
+                                                       code.evento.nome: nomeEvento,
+                                                       code.user.idAdmin: admin})
                 return 'fatto'
             else:
                 return 'solo ladmin puo modificare il nome di un evento'
@@ -144,21 +140,19 @@ class Event(MethodView):
             if user == admin:
                 print 'DEBUG: elimina evento'
                 cur.execute("DELETE FROM party WHERE id_evento=%s", (idEvento,))
-                msg = {'type': CODE.t['event'],
-                       'method': CODE.m['del'],
-                       'id_evento': str(idEvento),
-                       'nome_evento': Database.getEventName(idEvento),
-                       'admin_name': getFacebookName(admin)}
+                msg = {'type': code.type.evento,
+                       'method': code.method.delete,
+                       code.user.id: user,
+                       code.evento.id: str(idEvento),
+                       code.user.idAdmin: admin}
 
             else:
                 print 'DEBUG: uscito evento'
                 delUtenteFromEvent(idEvento, user)
-                msg = {'type': CODE.t['event'],
-                       'method': CODE.m['uscito'],
-                       'id_evento': str(idEvento),
-                       'nome_evento': Database.getEventName(idEvento),
-                       'id_user': user,
-                       'name_user': getFacebookName(user)}
+                msg = {'type': code.type.evento,
+                       'method': code.method.uscito,
+                       code.evento.id: str(idEvento),
+                       code.user.id: user}
 
             sendNotificationEvent(idEvento, user, msg)
             return 'fatto'
