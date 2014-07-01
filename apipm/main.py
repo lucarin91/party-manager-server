@@ -122,7 +122,7 @@ DEBUG FUNCTION
 def send():
     if request.method == 'POST' and request.form['idFacebook'] != '':
         idFacebook = request.form['idFacebook']
-        sendNotification(idFacebook, {'type': CODE.t['test']})
+        sendNotification(idFacebook, {'type': code.type.test})
         return 'fatto'
     else:
         return render_template('send.html')
