@@ -190,7 +190,7 @@ def getNumUtentiEvent(idEvento):
         cur = sql.cursor()
         cur.execute("SELECT num_utenti from party where id_evento=%s", (idEvento,))
         sql.commit()
-        return cur.fetchall()[0]
+        return cur.fetchone()[0]
     except Exception, e:
         sql.rollback()
         print 'error ' + str(e)
