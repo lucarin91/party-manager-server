@@ -151,7 +151,7 @@ class Risposte(MethodView):
             domanda = cur.fetchone()[0]
             '''
             cur.execute(
-                "SELECT risposta, num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
+                "SELECT num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
             sql.commit()
             risposta = cur.fetchone()
 
@@ -180,7 +180,7 @@ class Risposte(MethodView):
                         domanda = cur.fetchone()[0]
                         '''
                         cur.execute(
-                            "SELECT risposta, num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
+                            "SELECT num_risposta FROM risposte where id_risposta=%s", (idRisposta,))
                         sql.commit()
                         risposta = cur.fetchone()
 
