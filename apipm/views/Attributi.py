@@ -211,7 +211,7 @@ class Attributi(MethodView):
                 sql.commit()
                 sendNotificationEvent(idEvento,
                                       user,
-                                      {'type': code.type.attributo CODE.t['attr'],
+                                      {'type': code.type.attributo,
                                        'method': code.method.delete,
                                        code.evento.id: str(idEvento),
                                        code.user.id: user,
