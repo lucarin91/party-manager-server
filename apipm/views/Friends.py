@@ -77,7 +77,7 @@ class Friends(MethodView):
                                       {'type': code.type.user,
                                        'method': code.method.delete,
                                        code.evento.id: str(idEvento),
-                                       code.user.admin: admin,
+                                       code.user.idAdmin: admin,
                                        code.user.id: user,
                                        code.user.idDelete: idFacebook,
                                        code.user.nomeDelete: getFacebookName(idFacebook)})

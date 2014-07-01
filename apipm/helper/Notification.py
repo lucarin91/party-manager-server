@@ -12,39 +12,33 @@ from ..helper import *
 
 
 class code:
-
     class type:
         evento = '1'
         attributo = '2'
         risposta = '3'
         user = '4'
         test = '5'
-
     class method:
         new = '1'
         modify = '2'
         delete = '3'
         uscito = '4'
-
     class evento:
         id = 'id_evento'
         nome = 'nome_evento'
         num = 'num_utenti'
         nomeVecchio = 'nome_evento_vec'
-
     class attributo:
         id = 'id_attributo'
         nome = 'domanda'
         template = 'template'
         chiusa = 'chiusa'
         num = 'numd'
-
     class risposta:
         id = 'id_risposta'
         nome = 'nome_risposta'
         agg = 'agg'
         num = 'numr'
-
     class user:
         id = 'id_user'
         nome = 'nome_user'
