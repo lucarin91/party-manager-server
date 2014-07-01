@@ -162,7 +162,7 @@ class Risposte(MethodView):
                                                    code.evento.id: str(idEvento),
                                                    code.attributo.id: str(idAttributo),
                                                    code.risposta.id: str(idRisposta),
-                                                   code.risposta.num: str(risposta[1])})
+                                                   code.risposta.num: str(risposta[0])})
 
         except Exception, e:
             if isinstance(e, psycopg2.Error):
@@ -191,7 +191,7 @@ class Risposte(MethodView):
                                                                code.evento.id: str(idEvento),
                                                                code.attributo.id: str(idAttributo),
                                                                code.risposta.id: str(idRisposta),
-                                                               code.risposta.num: str(risposta[1])})
+                                                               code.risposta.num: str(risposta[0])})
                     except Exception, e:
                         sql.rollback()
                         return 'error' + str(e)
