@@ -50,7 +50,6 @@ def requiresLogin(f):
         return f(*args, **kwargs)
     return decorated
 
-
 @app.route('/')
 @requiresLogin
 def index():
