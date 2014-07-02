@@ -102,7 +102,7 @@ class Attributi(MethodView):
                 domanda = request.form['domanda']
                 template = request.form.get('template')
                 risposta = request.form.get('risposta') if request.form.get('risposta') != '' else None
-                chiusa = bool(request.form['chiusa'])
+                chiusa = bool(int(request.form['chiusa']))
                 user = session['idFacebook']
                 admin = Database.getAdminOfEvent(idEvento)
             except Exception, e:
@@ -119,7 +119,7 @@ class Attributi(MethodView):
                 #templateList=[p[0] for p in templateDom]
                 # print "DEBUG " + str(templateList)
                 app.logger.debug('valore chiusa: '+str(chiusa))
-                
+
                 if chiusa and user != admin:
                     return 'solo ladmin dellevento puo scrivere una domanda chiusa'
 
