@@ -98,12 +98,16 @@ class Attributi(MethodView):
         if request.form['domanda'] != '' and request.form['chiusa'] != '':
 
             # TO_DO: controlare che l'evento sia il mio
-            domanda = request.form['domanda']
-            template = request.form.get('template')
-            risposta = request.form.get('risposta') if request.form.get('risposta') != '' else None
-            chiusa = request.form['chiusa']
-            user = session['idFacebook']
-            admin = Database.getAdminOfEvent(idEvento)
+            try:
+                domanda = request.form['domanda']
+                template = request.form.get('template')
+                risposta = request.form.get('risposta') if request.form.get('risposta') != '' else None
+                chiusa = bool(request.form['chiusa'])
+                user = session['idFacebook']
+                admin = Database.getAdminOfEvent(idEvento)
+            except Exception, e:
+                app.logger.error(str(e))
+                return 'parameter exception'
             # print 'user e di tipo: ' + str(type(user))
 
             # print "DEBUG parametri: " + domanda + " " + str(template) + " " + str(risposta) + " " + chiusa + " " + user
@@ -114,7 +118,8 @@ class Attributi(MethodView):
                 # return jsonify(templateDom)
                 #templateList=[p[0] for p in templateDom]
                 # print "DEBUG " + str(templateList)
-
+                app.logger.debug('valore chiusa: '+str(chiusa))
+                
                 if chiusa and user != admin:
                     return 'solo ladmin dellevento puo scrivere una domanda chiusa'
 
