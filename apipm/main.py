@@ -22,7 +22,7 @@ handler = RotatingFileHandler('apipm.log', maxBytes=10000, backupCount=1)
 formatter = logging.Formatter("[%(asctime)s] {%(module)s:%(lineno)d} %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 
-#LOG EMAIL
+# LOG EMAIL
 ADMINS = ['lucarin91@gmail.com', 'fedo.coro@gmail.com']
 mail_handler = SMTPHandler('127.0.0.1',
                            'apipm-error@sfcoding.com',
@@ -49,6 +49,7 @@ def requiresLogin(f):
             return 'session error'
         return f(*args, **kwargs)
     return decorated
+
 
 @app.route('/')
 @requiresLogin

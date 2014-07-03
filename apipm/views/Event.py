@@ -160,7 +160,7 @@ class Event(MethodView):
 
         except Exception, e:
             sql.rollback()
-            print 'error ' + str(e)
+            app.logger.error(str(e))
             return 'error ' + str(e)
         finally:
             cur.close()

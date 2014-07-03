@@ -70,10 +70,9 @@ class Friends(MethodView):
             user = session['idFacebook']
             admin = Database.getAdminOfEvent(idEvento)
             if admin == user:
+                idRegList = Database.getIdCellofEvento(idEvento, user)
                 Database.delUtenteFromEvent(idEvento, idFacebook)
-
-                sendNotificationEvent(idEvento,
-                                      user,
+                sendNotificationEvent(idRegList,
                                       {'type': code.type.user,
                                        'method': code.method.delete,
                                        code.evento.id: str(idEvento),
@@ -87,5 +86,5 @@ class Friends(MethodView):
                 return 'error no amministratore'
 
         except Exception, e:
-            print 'error ' + str(e)
+            app.logger.error(str(e))
             return 'error ' + str(e)
