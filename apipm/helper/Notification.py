@@ -103,8 +103,9 @@ def sendNotificationEvent(idEvento, user, message):
             regId = getIdCellofEvento(idEvento, user)
 
         app.logger.debug(str(regId))
+        if len(regId) != 0:
+            sendNotificationList(regId, message)
 
-        sendNotificationList(regId, message)
     except Exception, e:
         app.logger.error('NotificheEvent: ' + str(e))
 
