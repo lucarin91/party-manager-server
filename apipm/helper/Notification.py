@@ -95,13 +95,18 @@ def sendNotification(idFacebook, message):
 
 
 def sendNotificationEvent(idEvento, user, message):
-    debug = request.args.get('debug') if request.args.get('debug') is not None else 'false'
-    if debug == 'true':
-        regId = getIdCellofEvento(idEvento, None)
-    else:
-        regId = getIdCellofEvento(idEvento, user)
+    try:
+        debug = request.args.get('debug') if request.args.get('debug') is not None else 'false'
+        if debug == 'true':
+            regId = getIdCellofEvento(idEvento, None)
+        else:
+            regId = getIdCellofEvento(idEvento, user)
 
-    sendNotificationList(regId, message)
+        app.logger.debug(str(regId))
+
+        sendNotificationList(regId, message)
+    except Exception, e:
+        app.logger.error('NotificheEvent: ' + str(e))
 
 
 def sendNotificationList(userList, message):
@@ -153,5 +158,5 @@ def factoryMessage(msg):
     if code.user.id in msg and code.user.nome not in msg:
         msg[code.user.nome] = Facebook.getFacebookName(msg.get(code.user.id))
 
-    app.logger.debug(str(msg))
+    # app.logger.debug(str(msg))
     return msg
