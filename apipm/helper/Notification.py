@@ -12,33 +12,39 @@ from ..helper import *
 
 
 class code:
+
     class type:
         evento = '1'
         attributo = '2'
         risposta = '3'
         user = '4'
         test = '5'
+
     class method:
         new = '1'
         modify = '2'
         delete = '3'
         uscito = '4'
+
     class evento:
         id = 'id_evento'
         nome = 'nome_evento'
         num = 'num_utenti'
         nomeVecchio = 'nome_evento_vec'
+
     class attributo:
         id = 'id_attributo'
         nome = 'domanda'
         template = 'template'
         chiusa = 'chiusa'
         num = 'numd'
+
     class risposta:
         id = 'id_risposta'
         nome = 'nome_risposta'
         agg = 'agg'
         num = 'numr'
+
     class user:
         id = 'id_user'
         nome = 'nome_user'
@@ -89,45 +95,42 @@ def sendNotification(idFacebook, message):
 
 
 def sendNotificationEvent(idEvento, user, message):
-    try:
-        cur = sql.cursor()
-        debug = request.args.get('debug') if request.args.get('debug') is not None else 'false'
-        print 'SEND NOTIFICATION: ' + debug
-        if debug == 'true':
-            cur.execute(
-                "select array(select id_cell from evento natural join utenti where id_evento=%s)", (idEvento,))
-        else:
-            cur.execute("""SELECT array(SELECT id_cell
-                                        FROM evento NATURAL JOIN utenti
-                                        WHERE id_evento=%s and id_user<>%s)""",
-                        (idEvento, user))
-        sql.commit()
-        regIds = cur.fetchall()[0][0]
-        # print 'regIds: ' + str(regIds)
-        response = gcmSender.json_request(registration_ids=regIds, data=factoryMessage(message))
+    debug = request.args.get('debug') if request.args.get('debug') is not None else 'false'
+    if debug == 'true':
+        regId = getIdCellofEvento(idEvento, None)
+    else:
+        regId = getIdCellofEvento(idEvento, user)
 
-        # Handling errors
-        if 'errors' in response:
-            print 'error GCM: send notification'
-            # for error, reg_ids in response['errors'].items():
-                # Check for errors and act accordingly
-                # if error is 'NotRegistered':
-                    # Remove reg_ids from database
-                    # for reg_id in reg_ids:
+    sendNotificationList(regId, message)
 
-        if 'canonical' in response:
-            print 'canonical change'
-            for reg_id, canonical_id in response['canonical'].items():
-                # Repace reg_id with canonical_id in your database
+
+def sendNotificationList(userList, message):
+    response = gcmSender.json_request(registration_ids=userList, data=factoryMessage(message))
+
+    # Handling errors
+    if 'errors' in response:
+        app.logger.error('Notification ' + str(response.get('errors')))
+        # print 'error GCM: send notification'
+        # for error, reg_ids in response['errors'].items():
+        # Check for errors and act accordingly
+        # if error is 'NotRegistered':
+                # Remove reg_ids from database
+                # for reg_id in reg_ids:
+
+    if 'canonical' in response:
+        app.error.info('canonical change' + str(response.get('canonical')))
+        for reg_id, canonical_id in response['canonical'].items():
+        # Repace reg_id with canonical_id in your database
+            try:
+                cur = sql.cursor()
                 cur.execute(
                     "UPDATE utenti SET id_cell = %s WHERE id_cell = %s", (canonical_id, reg_id))
                 sql.commit()
-
-    except Exception, e:
-        sql.rollback()
-        print 'error GCM: ' + str(e)
-    finally:
-        cur.close()
+            except Exception, e:
+                sql.rollback()
+                app.logger.error('canonical change: ' + str(e))
+            finally:
+                cur.close()
 
 
 def factoryMessage(msg):

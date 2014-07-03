@@ -7,4 +7,5 @@ from Database import delUtenteFromEvent
 from Facebook import getFacebookName
 from Notification import sendNotification
 from Notification import sendNotificationEvent
+from Notification import sendNotificationList
 from Notification import code

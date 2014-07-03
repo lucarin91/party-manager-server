@@ -197,4 +197,20 @@ def getNumUtentiEvent(idEvento):
         return 'error ' + str(e)
     finally:
         cur.close()
-        
+
+
+def getIdCellofEvento(idEvento, user):
+    try:
+        cur = sql.cursor()
+        cur.execute("""SELECT array(SELECT id_cell
+                                    FROM evento NATURAL JOIN utenti
+                                    WHERE id_evento=%s and id_user<>%s)""",
+                    (idEvento, user))
+        sql.commit()
+        return cur.fetchall()[0][0]
+    except Exception, e:
+        sql.rollback()
+        app.logger.error('DatabaseHelper: ' + str(e))
+        return None
+    finally:
+        cur.close()

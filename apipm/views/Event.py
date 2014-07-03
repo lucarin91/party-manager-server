@@ -110,7 +110,7 @@ class Event(MethodView):
                 app.logger.debug('modifca nome admin')
                 cur.execute(
                     "UPDATE party SET nome_evento=%s WHERE id_evento=%s", (nomeEvento, idEvento,))
-                
+
                 sendNotificationEvent(idEvento, user, {'type': code.type.evento,
                                                        'method': code.method.modify,
                                                        code.user.id: user,
@@ -139,12 +139,14 @@ class Event(MethodView):
 
             if user == admin:
                 print 'DEBUG: elimina evento'
+                idRegList = Database.getIdCellofEvento(idEvento, user)
                 cur.execute("DELETE FROM party WHERE id_evento=%s", (idEvento,))
                 msg = {'type': code.type.evento,
                        'method': code.method.delete,
                        code.user.id: user,
                        code.evento.id: str(idEvento),
                        code.user.idAdmin: admin}
+                sendNotificationList(idRegList, msg)
 
             else:
                 print 'DEBUG: uscito evento'
@@ -153,8 +155,7 @@ class Event(MethodView):
                        'method': code.method.uscito,
                        code.evento.id: str(idEvento),
                        code.user.id: user}
-
-            sendNotificationEvent(idEvento, user, msg)
+                sendNotificationEvent(idEvento, user, msg)
             return 'fatto'
 
         except Exception, e:
