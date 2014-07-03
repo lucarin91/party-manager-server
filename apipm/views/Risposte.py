@@ -200,7 +200,7 @@ class Risposte(MethodView):
         finally:
             cur.close()
 
-        return idRisposta
+        return str(idRisposta)
 
     def modificaDomandaChiusa(self, idEvento, idAttributo, idRisposta, risposta):
         print 'entrato in modifica risposta'
