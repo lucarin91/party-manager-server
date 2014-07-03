@@ -17,7 +17,7 @@ def getFacebookName(idFacebook):
             for u in idFacebook:
                 ris.append({'id_user': u,
                             'name': json.load(urllib2.urlopen('http://graph.facebook.com/' + u))['name']})
-            return str(ris)
+            return json.dumps(ris)
         else:
             print 'parametro errato'
             return None
