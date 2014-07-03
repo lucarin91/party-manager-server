@@ -72,14 +72,14 @@ class Friends(MethodView):
             if admin == user:
                 idRegList = Database.getIdCellofEvento(idEvento, user)
                 Database.delUtenteFromEvent(idEvento, idFacebook)
-                sendNotificationEvent(idRegList,
-                                      {'type': code.type.user,
-                                       'method': code.method.delete,
-                                       code.evento.id: str(idEvento),
-                                       code.user.idAdmin: admin,
-                                       code.user.id: user,
-                                       code.user.idDelete: idFacebook,
-                                       code.user.nomeDelete: getFacebookName(idFacebook)})
+                sendNotificationList(idRegList,
+                                     {'type': code.type.user,
+                                      'method': code.method.delete,
+                                      code.evento.id: str(idEvento),
+                                      code.user.idAdmin: admin,
+                                      code.user.id: user,
+                                      code.user.idDelete: idFacebook,
+                                      code.user.nomeDelete: getFacebookName(idFacebook)})
 
                 return 'fatto'
             else:

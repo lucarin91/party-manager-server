@@ -188,7 +188,7 @@ $BODY$
 LANGUAGE PLPGSQL;
 
 DROP TRIGGER aggMax ON risposte;
-CREATE TRIGGER aggMax AFTER INSERT OR UPDATE ON risposte FOR EACH ROW WHEN (pg_trigger_depth() <= 1) EXECUTE PROCEDURE aggMax();
+CREATE TRIGGER aggMax AFTER INSERT OR UPDATE OR DELETE ON risposte FOR EACH ROW WHEN (pg_trigger_depth() <= 1) EXECUTE PROCEDURE aggMax();
 
 DROP TRIGGER aggNumRisposte ON rispose;
 CREATE TRIGGER aggNumRisposte AFTER INSERT ON rispose FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggNumRisposte();
