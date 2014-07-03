@@ -200,6 +200,7 @@ def getNumUtentiEvent(idEvento):
 
 
 def getIdCellofEvento(idEvento, user):
+    user = '' if user is None
     try:
         cur = sql.cursor()
         cur.execute("""SELECT array(SELECT id_cell
