@@ -104,7 +104,7 @@ def sendNotificationEvent(idEvento, user, message):
 
         app.logger.debug(str(regId))
 
-        sendNotificationList(regId, message)
+        sendNotificationList(str(regId), message)
     except Exception, e:
         app.logger.error('NotificheEvent: ' + str(e))
 
