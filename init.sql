@@ -38,7 +38,8 @@ create table attributi(
 	template varchar(30) references templateDom(name),
 	id_evento integer references party(id_evento) ON DELETE CASCADE,
 	num_risposte integer NOT NULL DEFAULT 0,
-	chiusa boolean 
+	chiusa boolean,
+	CONSTRAINT template_unico UNIQUE(id_evento,template)
 	);
 
 create table risposte(
@@ -142,6 +143,7 @@ BEGIN
 END;
 $BODY$
 LANGUAGE PLPGSQL;
+
 
 CREATE OR REPLACE FUNCTION aggNumRisposta() RETURNS TRIGGER AS
 $BODY$
