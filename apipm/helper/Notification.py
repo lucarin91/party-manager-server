@@ -111,32 +111,35 @@ def sendNotificationEvent(idEvento, user, message):
 
 
 def sendNotificationList(userList, message):
-    response = gcmSender.json_request(registration_ids=userList, data=factoryMessage(message))
+    try:
+        response = gcmSender.json_request(registration_ids=userList, data=factoryMessage(message))
 
-    # Handling errors
-    if 'errors' in response:
-        app.logger.error('Notification ' + str(response.get('errors')))
-        # print 'error GCM: send notification'
-        # for error, reg_ids in response['errors'].items():
-        # Check for errors and act accordingly
-        # if error is 'NotRegistered':
-                # Remove reg_ids from database
-                # for reg_id in reg_ids:
+        # Handling errors
+        if 'errors' in response:
+            app.logger.error('Notification ' + str(response.get('errors')))
+            # print 'error GCM: send notification'
+            # for error, reg_ids in response['errors'].items():
+            # Check for errors and act accordingly
+            # if error is 'NotRegistered':
+                    # Remove reg_ids from database
+                    # for reg_id in reg_ids:
 
-    if 'canonical' in response:
-        app.error.info('canonical change' + str(response.get('canonical')))
-        for reg_id, canonical_id in response['canonical'].items():
-        # Repace reg_id with canonical_id in your database
-            try:
-                cur = sql.cursor()
-                cur.execute(
-                    "UPDATE utenti SET id_cell = %s WHERE id_cell = %s", (canonical_id, reg_id))
-                sql.commit()
-            except Exception, e:
-                sql.rollback()
-                app.logger.error('canonical change: ' + str(e))
-            finally:
-                cur.close()
+        if 'canonical' in response:
+            app.error.info('canonical change' + str(response.get('canonical')))
+            for reg_id, canonical_id in response['canonical'].items():
+            # Repace reg_id with canonical_id in your database
+                try:
+                    cur = sql.cursor()
+                    cur.execute(
+                        "UPDATE utenti SET id_cell = %s WHERE id_cell = %s", (canonical_id, reg_id))
+                    sql.commit()
+                except Exception, e:
+                    sql.rollback()
+                    app.logger.error('canonical change: ' + str(e))
+                finally:
+                    cur.close()
+    except Exception, e:
+        app.logger.debug(str(e))
 
 
 def factoryMessage(msg):
