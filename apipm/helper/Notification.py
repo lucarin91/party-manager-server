@@ -103,15 +103,15 @@ def sendNotificationEvent(idEvento, user, message):
             regId = getIdCellofEvento(idEvento, user)
 
         app.logger.debug(str(regId))
-        if len(regId) != 0:
-            sendNotificationList(regId, message)
+
+        sendNotificationList(regId, message)
 
     except Exception, e:
         app.logger.error('NotificheEvent: ' + str(e))
 
 
 def sendNotificationList(userList, message):
-    try:
+    if len(userList) != 0:
         response = gcmSender.json_request(registration_ids=userList, data=factoryMessage(message))
 
         # Handling errors
@@ -138,8 +138,6 @@ def sendNotificationList(userList, message):
                     app.logger.error('canonical change: ' + str(e))
                 finally:
                     cur.close()
-    except Exception, e:
-        app.logger.debug(str(e))
 
 
 def factoryMessage(msg):
