@@ -187,6 +187,23 @@ END;
 $BODY$
 LANGUAGE PLPGSQL;
 
+/* TEST */
+CREATE OR REPLACE FUNCTION aggDataEventi() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+BEGIN
+	IF OLD.template = 'data' THEN
+		UPDATE party SET data=NULL WHERE id_evento=OLD.id_evento;
+	END IF;
+	RETURN NULL;
+END;
+$BODY$
+LANGUAGE PLPGSQL;
+
+DROP TRIGGER aggDataEventi ON attributi;
+CREATE TRIGGER aggDataEventi AFTER DELETE ON attributi FOR EACH ROW WHEN (pg_trigger_depth() = 0) EXECUTE PROCEDURE aggDataEventi();
+/* END TEST */
+
 DROP TRIGGER aggMax ON risposte;
 CREATE TRIGGER aggMax AFTER INSERT OR UPDATE OR DELETE ON risposte FOR EACH ROW WHEN (pg_trigger_depth() <= 1) EXECUTE PROCEDURE aggMax();
 
