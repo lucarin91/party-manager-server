@@ -1,8 +1,5 @@
 import psycopg2
 import psycopg2.extras
-import collections
-
-from flask import Flask
 from flask import request
 from flask import jsonify
 from flask import session
@@ -18,7 +15,6 @@ class Risposte(MethodView):
 
     def get(self, idEvento, idAttributo):
         # controllare che l evento e il mio
-
         #user = session['idFacebook']
 
         try:
@@ -54,8 +50,6 @@ class Risposte(MethodView):
 
     def post(self, idEvento, idAttributo):
         if request.form['risposta'] != '':
-
-            #idAttributo = request.form['idAttributo']
             risposta = request.form['risposta']
             user = session['idFacebook']
 
@@ -75,11 +69,6 @@ class Risposte(MethodView):
 
                 cur.execute(
                     "INSERT INTO rispose(id_risposta,id_attributo,id_user) VALUES(%s,%s,%s)", (idRisposta, idAttributo, user))
-                '''
-                cur.execute("select domanda from attributi where id_attributo=%s", (idAttributo,))
-                domanda = cur.fetchone()[0]
-                sql.commit()
-                '''
                 sendNotificationEvent(idEvento, user, {'type': code.type.risposta,
                                                        'method': code.method.new,
                                                        code.risposta.agg: '0',
@@ -100,12 +89,7 @@ class Risposte(MethodView):
                             cur.execute(
                                 "UPDATE rispose SET id_risposta = %s WHERE id_user = %s and id_attributo = %s", (idRisposta, user, idAttributo))
                             sql.commit()
-                            '''
-                            cur.execute(
-                                "select domanda from attributi where id_attributo=%s", (idAttributo,))
-                            domanda = cur.fetchone()[0]
-                            sql.commit()
-                            '''
+
                             sendNotificationEvent(idEvento,
                                                   user,
                                                   {'type': code.type.risposta,
@@ -233,39 +217,6 @@ class Risposte(MethodView):
         else:
             return 'non sei admin di questo evento'
 
-        '''
-        try:
-            cur = sql.cursor()
-            cur.execute("INSERT INTO rispose(id_risposta,id_user) VALUES(%s,%s)",(idRisposta,user))
-            sql.commit()
-
-            cur.excute("SELECT id_attributo FROM risposte WHERE id_risposta=%s",(idRisposta,))
-            sql.commit()
-            idAttributo = cur.fetchone()[0]
-
-            cur.execute("""SELECT num_utenti FROM party WHERE id_evento=
-                            (SELECT id_evento FROM attributi WHERE id_attributo=%s""",(idAttributo,))
-            sql.commit()
-            numUtenti = cur.fetchone()[0]
-
-            cur.execute("SELECT count(*) FROM rispose WHERE id_risposta=%s",(idRisposta,))
-            sql.commit()
-            countRis = cur.fetchone()[0]
-            
-            if numUtenti == countRis:
-                cur.execute("SELECT risposta FROM risposte WHERE id_risposta=%s",(idRisposta,))
-                cur.execute("""UPDATE attributi SET risposta = 
-                                (SELECT risposta FROM risposte WHERE id_risposta=%s)
-                                WHERE id_attributo = %s""",(idRisposta,idAttributo))
-
-        except Exception, e:
-            sql.rollback()
-            return 'error '+str(e)
-        finally:
-            cur.close()
-
-        return 'fatto'
-        '''
 
     def delete(self, idEvento, idAttributo, idRisposta):
         user = session['idFacebook']

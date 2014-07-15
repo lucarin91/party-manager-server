@@ -21,21 +21,13 @@ class Event(MethodView):
         facebookId = session['idFacebook']
         try:
             cur = sql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-            #cur = sql.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor)
-            #cur = sql.cursor()
-            # cur.execute("""SELECT evento.id_evento, party.nome_evento, party.admin, party.data, party.num_utenti
-            #                FROM evento
-            #                JOIN party ON evento.id_evento=party.id_evento
-            #                JOIN utenti ON utenti.id_user=evento.id_user
-            #                WHERE utenti.id_user=%s""",
-            #            (facebookId,))
             cur.execute("""SELECT t.id_evento, t.nome_evento, t.admin, t.num_utenti, b.risposta as data
                         FROM (SELECT party.id_evento, party.nome_evento, party.admin, party.num_utenti
                               FROM evento JOIN party ON evento.id_evento=party.id_evento
                               WHERE evento.id_user=%s
                               ) as t
                         LEFT JOIN (
-                              SELECT attributi.id_evento, risposte.risposta 
+                              SELECT attributi.id_evento, risposte.risposta
                               FROM attributi NATURAL JOIN risposte
                               WHERE template='data' and max=true
                               ) as b

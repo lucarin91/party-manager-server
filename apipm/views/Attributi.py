@@ -13,46 +13,12 @@ from ..helper import *
 
 
 class Attributi(MethodView):
-# id_attributo | domanda | template | id_evento | chiusa
-#--------------+---------+----------+-----------+--------
 
-# id_risposta | id_attributo | id_user
-#-------------+--------------+---------
     def get(self, idEvento):
        # TO-DO: controllare che l'evento sia il mio
         try:
             cur = sql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-            '''
-            cur.execute("""select distinct id_attributo, domanda, template, id_risposta, risposta, numR, numD, chiusa from
-                            attributi 
-                            natural join 
-                            (select t1.id_attributo, t1.id_risposta, t2.numR from 
-                            (
-                            select id_risposta, id_attributo, count(*) as cnt 
-                            from rispose 
-                            group by id_risposta, id_attributo
-                            ) t1 
-                            join 
-                            (
-                            select id_attributo, max(cnt) over (partition by id_attributo) as numR 
-                            from rispose 
-                            natural join 
-                            (
-                            select id_risposta, id_attributo, count(*) as cnt
-                            from rispose 
-                            group by id_risposta, id_attributo
-                            ) t4 
-                            ) t2 
-                            on t2.id_attributo=t1.id_attributo and t1.cnt=t2.numR 
-                            ) tab natural join
-                            (
-                            select id_attributo, count(*) as numD 
-                            from rispose 
-                            group by id_attributo
-                            ) tA natural join risposte
-                            where attributi.id_evento=%s""",(idEvento,))
-            '''
-            cur.execute("""SELECT DISTINCT attributi.id_attributo, 
+            cur.execute("""SELECT DISTINCT attributi.id_attributo,
                                             domanda,
                                             template,
                                             id_risposta,
@@ -60,31 +26,12 @@ class Attributi(MethodView):
                                             num_risposta AS numR,
                                             num_risposte AS numD,
                                             chiusa
-                            FROM risposte NATURAL JOIN rispose 
-                                RIGHT JOIN attributi ON rispose.id_attributo = attributi.id_attributo 
+                            FROM risposte NATURAL JOIN rispose
+                                RIGHT JOIN attributi ON rispose.id_attributo = attributi.id_attributo
                             WHERE id_evento=%s and (max=true or id_risposta is NULL)""",
                         (idEvento,))
             sql.commit()
             attributi = cur.fetchall()
-
-            '''
-            cur.execute("""select id_attributo, domanda, template, chiusa, id_risposta, risposta, id_user 
-                        from attributi natural join rispose natural join risposte
-                        where id_evento=%s order by id_attributo, id_risposta""", (idEvento,))
-            sql.commit()
-            attributi = cur.fetchall()
-            
-            ris = []
-            if (len(attributi) != 0):
-                ris.append({'id_attributo': attributi[0]['id_attributo'], 'domanda': attributi[0]['domanda'], 'template': attributi[0]['template'], 'chiusa': attributi[0]['chiusa'], 'rispList': []})
-            
-                for p in attributi:
-                    if p['id_attributo'] != ris[len(ris)-1]['id_attributo']:
-                        ris.append({'id_attributo': p['id_attributo'], 'domanda': p['domanda'], 'template': p['template'], 'chiusa': p['chiusa'], 'rispList': []})
-                    
-                    userName = json.load(urllib2.urlopen('http://graph.facebook.com/'+ str(p['id_user'])))
-                    ris[len(ris)-1]['rispList'].append({'id_risposta': p['id_risposta'], 'risposta': p['risposta'], 'user': userName['name']})
-            '''
         except Exception, e:
             sql.rollback()
             return 'error ' + str(e)
@@ -114,11 +61,7 @@ class Attributi(MethodView):
             # return domanda+template+risposta+chiusa+user
             try:
                 cur = sql.cursor()
-                #templateDom = cur.fetchall()
-                # return jsonify(templateDom)
-                #templateList=[p[0] for p in templateDom]
-                # print "DEBUG " + str(templateList)
-                app.logger.debug('valore chiusa: '+str(chiusa))
+                app.logger.debug('valore chiusa: ' + str(chiusa))
 
                 if chiusa and user != admin:
                     return 'solo ladmin dellevento puo scrivere una domanda chiusa'
@@ -130,7 +73,7 @@ class Attributi(MethodView):
 
                 # return 'template '+template+' chiusa '+chiusa
 
-                    cur.execute("""INSERT INTO attributi(domanda,template,id_evento,chiusa) 
+                    cur.execute("""INSERT INTO attributi(domanda,template,id_evento,chiusa)
                                     VALUES(%s,%s,%s,%s) RETURNING id_attributo""",
                                 (domanda, template, idEvento, chiusa))
                 else:
@@ -162,23 +105,6 @@ class Attributi(MethodView):
 
                 sql.commit()
 
-                '''
-                userName = getFacebookName(user)
-                msg = {'type': CODE.t['attr'],
-                       'method': CODE.m['new'],
-                       'user': user,
-                       'userName': userName,
-                       'id_evento': str(idEvento),
-                       'id_attributo': idAttributo,
-                       'domanda': domanda,
-                       'risposta': risposta,
-                       'id_risposta': str(idRisposta),
-                       'template': template,
-                       'chiusa': chiusa,
-                       'numd': '1',
-                       'numr': '1'
-                       }
-                '''
                 sendNotificationEvent(idEvento, user, {'type': code.type.attributo,
                                                        'method': code.method.new,
                                                        code.user.id: user,
