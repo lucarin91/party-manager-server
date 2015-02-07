@@ -14,8 +14,8 @@ from .helper import *
 from .views import *
 
 # facebook
-APPTOKEN = '401068586702319|5f78073b1129c9ff17880a96b6bf9ac9'
-APPID = '401068586702319'
+APPTOKEN = '401068586662319|5f78073b1129c9ff17880a96b6bf9ac9'
+APPID = '401068585602319'
 
 # LOG FILE
 handler = RotatingFileHandler('apipm.log', maxBytes=10000, backupCount=1)
@@ -23,7 +23,7 @@ formatter = logging.Formatter("[%(asctime)s] {%(module)s:%(lineno)d} %(levelname
 handler.setFormatter(formatter)
 
 # LOG EMAIL
-ADMINS = ['lucarin91@gmail.com', 'fedo.coro@gmail.com']
+ADMINS = ['cipposo@gmail.com', 'ulisse@gmail.com']
 mail_handler = SMTPHandler('127.0.0.1',
                            'apipm-error@sfcoding.com',
                            ADMINS, 'YourApplication Failed')
@@ -32,7 +32,7 @@ mail_handler.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 app.config.from_envvar('WSGI_ENV')
-app.secret_key = 'asdasdasd'
+app.secret_key = 'asdasjhgjhgjgjhgjhgdasd'
 app.logger.addHandler(handler)
 app.logger.setLevel(logging.DEBUG)
 app.logger.addHandler(mail_handler)
